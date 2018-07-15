@@ -1,0 +1,11 @@
+{
+  "name": "survey-stark",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:meghna-saxena/survey-stark.git",
+  "author": "Meghna Srivastava <meghna.s1906@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}

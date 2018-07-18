@@ -5,17 +5,26 @@ const keys = require("./config/keys");
 
 const app = express();
 
+// oauth flow by passport
 passport.use(
-  GoogleStrategy(
+  new GoogleStrategy(
     {
       clientID: keys.googleClientID,
-      clientSecret: googleClientSecret,
+      clientSecret: keys.googleClientSecret,
       callbackURL: "/auth/google/callback"
     },
     accessToken => {
       console.log(accessToken);
     }
   )
+);
+
+// created route handler
+app.get(
+  "/auth/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"]
+  })
 );
 
 const PORT = process.env.PORT || 5000;

@@ -209,7 +209,6 @@ Create remotely hosted copy/instance of mongoDB
 
 
 
-
 ### Connecting mongoose to mongo
 - Install mongoose on express api and then connect with the remotely hosted mongoDB
 `mongoose.connect(keys.mongoURI);`
@@ -220,3 +219,27 @@ Mongo and mongoose installed!
 - Use mongoose to create a new collection in mongo called 'users'
 - Collections are created by making a model class
 - When user signs in, save new record to the 'users' collection
+
+
+### Mongoose model classes
+- With mongo we can have many random arbitrary properties on any record of a given collection. 
+- However, mongoose wants to know all the diff properties that our record will have inside our db, and it requires to tell ahead of time with `Schema` object.
+- So when we use mongoose we lose ability of diff properties on each individual record, since it wants to know all the diff properties.
+
+- create schema for new collection
+- schema describes what every individual property or individual record is going to look like.
+
+```
+const mongoose = require("mongoose");
+// const Schema = mongoose.Schema;
+// es2015 destructuring, when property name and variable name are identical
+const { Schema } = mongoose;
+
+// create schema for new collection
+const userSchema = new Schema({
+    googleId: String
+});
+
+//create mongoose model class
+mongoose.model('users',userSchema);
+```

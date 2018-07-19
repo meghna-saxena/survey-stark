@@ -4,6 +4,7 @@ const keys = require("./config/keys");
 require("./services/passport");
 // when we return authRoutes file it returns a function
 const authRoutes = require("./routes/authRoutes");
+require("./models/User");
 
 //connecting mongoose with mongoDB
 mongoose.connect(keys.mongoURI);

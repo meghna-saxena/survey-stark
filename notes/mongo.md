@@ -187,3 +187,22 @@ Mongoose gives access to model instances, which are javascript objects that repr
 So in practise, we have one model class representing one collection, and many model instances representing each single records inside the mongoDB collection.
 
 
+
+### MongoDB setup
+
+2 diff ways to set in own express apps.
+
+1. Either install a local copy of mongoDB on personal laptop/desktop
+2. Or use remotely hosted instance of mongoDB
+
+Here, we'll use the latter. Reason: Its far easier to install mongoDB and create a local copy when it is remotely hosted.
+
+Therefore, use a third-party service to host a copy of mongoDB. So on this remote service , we will have our running mongoDB copy, and on our local comp we will have our express api server and react app as well.
+
+```
+Our local computer -> React app <-> express/node api -> mongoose.js -> mongoDB(hosted remotely)
+```
+
+
+Create remotely hosted copy of mongo
+`https://mlab.com/`

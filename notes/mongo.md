@@ -204,5 +204,19 @@ Our local computer -> React app <-> express/node api -> mongoose.js -> mongoDB(h
 ```
 
 
-Create remotely hosted copy of mongo
+Create remotely hosted copy/instance of mongoDB 
 `https://mlab.com/`
+
+
+
+
+### Connecting mongoose to mongo
+- Install mongoose on express api and then connect with the remotely hosted mongoDB
+`mongoose.connect(keys.mongoURI);`
+
+
+Mongo and mongoose installed!
+- Need to be able to identify users who signup and return to our app. We want to save the 'id' property of their google profile.
+- Use mongoose to create a new collection in mongo called 'users'
+- Collections are created by making a model class
+- When user signs in, save new record to the 'users' collection

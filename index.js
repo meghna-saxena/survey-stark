@@ -1,7 +1,12 @@
 const express = require("express");
+const mongoose = require("mongoose");
+const keys = require("./config/keys");
 require("./services/passport");
 // when we return authRoutes file it returns a function
 const authRoutes = require("./routes/authRoutes");
+
+//connecting mongoose with mongoDB
+mongoose.connect(keys.mongoURI);
 
 const app = express();
 

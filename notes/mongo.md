@@ -241,5 +241,52 @@ const userSchema = new Schema({
 });
 
 //create mongoose model class
+//'users' is collection name
 mongoose.model('users',userSchema);
 ```
+
+
+
+### Saving model instances
+Create new record to `users` collection anytime new user signs up our app.
+
+require mongoose inside passport.js, call the mongoose.model('users') and assign it new cont object User
+
+Now use this User model class to create new model instances and save it to db
+
+```
+const mongoose = require("mongoose");
+
+//one argument inside mongoose.model means we want to fetch something out of it, 2 args means load something into it
+//now User object is model class
+const User = mongoose.model("users");
+
+// OAuth flow by passport
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: keys.googleClientID,
+      clientSecret: keys.googleClientSecret,
+      callbackURL: "/auth/google/callback"
+    },
+    (accessToken, refreshToken, profile, done) => {
+      //new model instance to create individual records
+      new User({ googleId: profile.id }).save(); //saves in the database
+    }
+  )
+);
+```
+
+Error in server: schema hasn't been registered for model "users"
+So mongoose thinks we've not loaded a schema into mongoose that describes "users"
+
+Therefore, in index.js keep the require statements in following order -
+require("./models/User");
+require("./services/passport");
+
+
+Note:
+All the deprecation warnings in server is due to mongoose interaction with mongoDB, so ignore them.
+
+
+### Mongoose queries

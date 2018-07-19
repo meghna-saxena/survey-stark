@@ -9,4 +9,5 @@ const userSchema = new Schema({
 });
 
 //create mongoose model class
-mongoose.model('users',userSchema);
+//'users' is collection name
+mongoose.model('users', userSchema);

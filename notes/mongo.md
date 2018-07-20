@@ -470,3 +470,49 @@ Because we can be using multiple auth providers like fb, twitter etc., and if we
 - `Incoming req with cookie` => user model instance id -> identifies a user who is stored in the database
 
 
+> Notes:
+
+'User' refers the users model class, while 'user' refers to instance of a particular user. 
+
+const user = new User({googleId: profile.id}); 
+which essentially says, create a new instance of the User (model class) with the googleId property set = profile.id. 
+
+
+_______________________________________________________
+
+new User({ googleId: profile.id })  // this line creates the new User instance in User model
+.save()
+.then(user => done(null, user));   //why we used a promise here and pass user?
+
+We need the .then() promise to the pass the user back to the BROWSER. 
+
+There are two different things happening here:
+
+1. A new user is being instantiated and then saved in our DATABASE
+
+then...
+
+2. Once the saving of the user is complete, it is being passed back to the BROWSER using the promise that you just pointed out.
+
+to continue forward...
+
+3. This entire user is then automagically passed to the 'req' parameter by passport (we don't have to do anything there). That's why in the routes file where we create an api at '/api/current_user' we do the following: 
+
+..res.send(req.user)  // we make the user object and its contents available to our front end. The req.user would have been empty if we would not have used the promise that you pointed out. 
+
+
+
+### Deserialize User
+
+Take the id stuffed in the cookie and turn it back into an actual user model.
+
+```
+passport.deserializeUser((id, done) => {
+  //findByID finds record of a particular id
+  User.findById(id).then(user => {
+    done(null, user);
+  });
+});
+```
+
+Instruct passport to manage all of the authentication by using cookie. Passport if basic set of helpers to handle authentication. It has many ways to keep track of user, one of which is cookies

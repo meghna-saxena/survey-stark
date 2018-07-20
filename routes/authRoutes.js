@@ -10,4 +10,9 @@ module.exports = app => {
   );
 
   app.get("/auth/google/callback", passport.authenticate("google"));
+
+  //route handler to test someone who is logged into the application can get access to user record
+  app.get("/api/current_user", (req, res) => {
+    res.send(req.user);
+  });
 };

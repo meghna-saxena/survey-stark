@@ -545,3 +545,27 @@ app.use(passport.session());
 
 - keys to encrypt the cookie, so that no one can manually change the user ID. You can use mutiple keys and passport will randomly use one to encrypt the cookie.
 Keeps this key inside keys.js file
+
+
+
+### Testing authentication
+End result of the auth flow =>
+
+Request comes in -> Request -> Request sent to route handler
+
+Request -> Cookie-session(extracts/decrypt cookie data) -> passport(pulls user id our of the cookie data) -> deserializeUser(funct we write to turn user id into a user) -> User model instance added to req. object as 'req.user' 
+
+-> Req. object is then passed into express route handler
+
+
+Create new route handler to inspect the req.user property. If its present, means authentication is working.
+
+
+```
+//route handler to test someone who is logged into the application can get access to user record
+  app.get("/api/current_user", (req, res) => {
+    res.send(req.user);
+  });
+```
+
+> On localhost:500/api/current_user, user details can be seen which are save in the db

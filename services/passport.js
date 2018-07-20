@@ -7,6 +7,15 @@ const keys = require("../config/keys");
 //now User object is model class
 const User = mongoose.model("users");
 
+//user model which we have retrived from the db
+//by the callback func of google strategy
+passport.serializeUser((user, done) => {
+  //first arg null represents that no error occurs
+  //user.id is identifying piece of info for followup req
+  //user.id is _id provide by mongo for every record
+  done(null, user.id);
+});
+
 // OAuth flow by passport
 passport.use(
   new GoogleStrategy(

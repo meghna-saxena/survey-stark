@@ -520,3 +520,28 @@ Instruct passport to manage all of the authentication by using cookie. Passport 
 
 
 ### Enabling cookies
+Out of the box, express has no idea of how to handle cookies. So, install helper lib `cookie-session` to manage cookies in our application.
+
+- Passport will keep track of user authentication by using cookies
+- Required passport and cookie-session lib inside index.js
+
+
+```
+// tells express to use cookies inside app
+app.use(
+  cookieSession({
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    keys: [keys.cookieKey]
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+```
+
+- maxAge - how long can cookie exist in browser it is automatically expired. Eg 30 days. Now pass it in milliseconds => 
+30 * 24 * 60 * 60 * 1000
+
+- keys to encrypt the cookie, so that no one can manually change the user ID. You can use mutiple keys and passport will randomly use one to encrypt the cookie.
+Keeps this key inside keys.js file

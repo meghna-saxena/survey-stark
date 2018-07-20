@@ -385,3 +385,47 @@ I know this sounds hard, but it isn't as bad as it sounds.  To pull it off, ever
 
 
 ### Passport Callbacks
+
+Google strategy gives us this callback - 
+
+Steps:
+
+- Send req to google with 'code' included
+- Get user details
+- Do we already have a user with this profile ID in the db?
+- If no, create a user!
+- If yes, skip user creation!
+
+- Call 'done' with the user that was created or found!
+(Tell passport that we have finished creating a user & it should now resume the auth process)
+
+`done func.` tell passport that we're finished executing the code, resume the auth flow.
+
+```
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: keys.googleClientID,
+      clientSecret: keys.googleClientSecret,
+      callbackURL: "/auth/google/callback"
+    },
+    (accessToken, refreshToken, profile, done) => {
+      //initiate mongoose query
+      //look thru User collection and find first record with googleId: profile:id
+      User.findOne({ googleId: profile.id }).then(existingUser => {
+        if (existingUser) {
+          // we already have a record with a given profile id
+          done(null, existingUser);
+        } else {
+          // we dont have a record with the id, make a new record
+          //new model instance to create individual records
+          new User({ googleId: profile.id })
+            .save() //saves in the database
+            .then(user => done(null, user));
+        }
+      });
+    }
+  )
+);
+
+```

@@ -515,4 +515,8 @@ passport.deserializeUser((id, done) => {
 });
 ```
 
-Instruct passport to manage all of the authentication by using cookie. Passport if basic set of helpers to handle authentication. It has many ways to keep track of user, one of which is cookies
+Instruct passport to manage all of the authentication by using cookie. Passport if basic set of helpers to handle authentication. It has many ways to keep track of user, one of which is cookies.
+
+
+
+### Enabling cookies

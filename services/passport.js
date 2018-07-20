@@ -16,8 +16,17 @@ passport.use(
       callbackURL: "/auth/google/callback"
     },
     (accessToken, refreshToken, profile, done) => {
-      //new model instance to create individual records
-      const saved = new User({ googleId: profile.id }).save(); //saves in the database
+      //initiate mongoose query
+      //look thru User collection and find first record with googleId: profile:id
+      User.findOne({ googleId: profile.id }).then(existingUser => {
+        if (existingUser) {
+          // we already have a record with a given profile id
+        } else {
+          // we dont have a record with the id, make a new record
+          //new model instance to create individual records
+          new User({ googleId: profile.id }).save(); //saves in the database
+        }
+      });
     }
   )
 );

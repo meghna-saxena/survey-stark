@@ -290,3 +290,98 @@ All the deprecation warnings in server is due to mongoose interaction with mongo
 
 
 ### Mongoose queries
+- Create only one user record for a given googleID
+
+- Send req to google with 'code' included
+- Get user details
+- Do we already have a user with this profile ID in the db?
+- If no, create a user!
+- If yes, skip user creation!
+
+Therefore query the exisitng collection.
+
+We already have access to model class which represents the entire underlying collection of records that exists inside db. We use the model class to search over all the records inside that collection.
+
+use findOne() method over the User model class
+
+```
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: keys.googleClientID,
+      clientSecret: keys.googleClientSecret,
+      callbackURL: "/auth/google/callback"
+    },
+    (accessToken, refreshToken, profile, done) => {
+    //initiate mongoose query
+      //look thru User collection and find first record with googleId: profile:id
+      User.findOne({googleId: profile.id});
+
+      //new model instance to create individual records
+      new User({ googleId: profile.id }).save(); //saves in the database
+    }
+  )
+);
+
+```
+
+
+Whenever we reach to mongoDB, be it for search thru collection or saving a new record or edit or delete exisiting record, we're initiating an async action
+
+`MongoDB` interaction eg Query doesn't returns a user, instead it `returns a promise`. A promise is a tool in js for handling async code.
+
+```
+...
+(accessToken, refreshToken, profile, done) => {
+      //initiate mongoose query
+      //look thru User collection and find first record with googleId: profile:id
+      User.findOne({ googleId: profile.id })
+      .then(existingUser => {
+        if (existingUser) {
+          // we already have a record with a given profile id
+        } else {
+          // we dont have a record with the id, make a new record
+          //new model instance to create individual records
+          new User({ googleId: profile.id }).save(); //saves in the database
+        }
+      });
+    }
+  )
+);
+```
+
+
+
+> Notes
+
+Q) How would you (or I) handle the use case where someone would be logging in with multiple Auths? How would we prevent the strategy from searching the db and creating an unnecessary new User in the case that they had auth'd with Google and now are auth'ing with IG? 
+
+> Only way to handle this is to store the email given to you by the provider.  Remember that with google, in the profile object we got a list of the user emails.  We could store that list, then whenever someone signs in with another provider, check to see if that provider's emails have been used before from another provider.  
+
+The thing to keep in mind is that this opens you up to account highjacking.  For example, imagine the following:
+
+- Bill signs up to our service with Google.  Bill's google profile shows an email of bill@gmail.com
+
+- Hacker Jill then creates an account on Instagram and enters a fake email address of bill@gmail.com.  
+
+- Hacker Jill then comes to our site and tries to oauth through instagram
+
+- Our server might see the instagram profile email of bill@gmail.com, and - unless we guard against it - we might incorrectly link bill's account with this new instagram oauth
+
+To guard against this, do the following:
+
+- Bill signs up with Google, and we create a new account that contains an email of bill@gmail.com
+
+- Bill logs out, then comes back to our site and attempts to oauth with Instagram.  Let's imagine that instagram also lists bill@gmail.com
+
+- We must detect that Bill already has an account tied to google
+
+- After detecting that Bill already has a user account, we will only allow Bill to auth through Instagram and link this account if Bill is signed in with Google
+
+In other words, only allow account linking if the user is already signed in with the other account.  That proves that Bill is who they say they are and that both the Instagram and Google accounts belong to him.
+
+I know this sounds hard, but it isn't as bad as it sounds.  To pull it off, every use model record store the the list of emails from each provider that the user auths with.  Then, in each strategy you wire up, check to see if the user's email is already in use.  If it is, check to see if the user is logged in (by looking at req.user).  If they are, allow them to pass, otherwise tell them the email is in use and that they should go sign in with the other oauth provider first.
+
+
+
+### Passport Callbacks

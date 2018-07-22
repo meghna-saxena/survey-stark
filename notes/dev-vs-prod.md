@@ -41,3 +41,28 @@ New google api a/c for prod
 - consent screen -. product name
 - App type - webapp
 - Authorized javascript origins and authorized redirect uri's -> redirect to running heroku instance
+- Command `heroku open` or `heroku info` to get the authorized redirect uri for prod -> `https://surveystark.herokuapp.com/auth/google/callback`
+- Authorized JavaScript origins `https://surveystark.herokuapp.com`
+- Now we have prod version of google api credentials
+
+
+index.js -> config/keys.js -> commit this, so app knows what to do in dev or prod. It will now have actual set of keys -> are we doing dev or prod
+prod -> env variables
+dev -> config.js/dev.js -> dont commit this
+
+
+- When you deploy your server to heroku there's an existing env. variable called node_env
+- That env. variable tells whether or not we're running in a prod. environment
+- Previously we have used one env. variable setup by heroku
+`const PORT = process.env.PORT || 5000;`
+
+- Inside config/keys.js
+```
+// keys.js - figure out what set of credentials to return
+
+if (process.env.NODE_ENV === 'production') {
+    // we're in production, return the prod set of keys
+} else {
+    // we're in development, return the dev keys
+}
+```

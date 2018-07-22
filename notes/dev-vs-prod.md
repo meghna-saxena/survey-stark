@@ -73,3 +73,10 @@ whenever prod.js containing keys for prod is required on heroku, values of each 
 
 - prod.js is committed on github
 Reason: when we push our project to heroku, we want the prod.js file, so essentially it gives all the keys from env variables assigned in prod.js
+
+
+## Heroku env. variables
+- Make sure all the env. variables are defined on the heroku server
+- Do it inside heroku interface
+- Go to heroku project -> settings -> config variables -> set up all the diff variables with pasting the key values there for all the diff env variables
+- Now do the subsequent deployment by commiting and pushing the changes on heroku

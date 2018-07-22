@@ -544,3 +544,64 @@ Create new route handler to inspect the req.user property. If its present, means
     res.send(req.user);
   });
 ```
+
+
+
+### A deeper dive
+
+```
+// tells express to use cookies inside app
+app.use(
+  cookieSession({
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    keys: [keys.cookieKey]
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+```
+
+- `app.use` wires up middleware inside our application. Middlewares are small funct that can be used to modify incoming req. to our app before they are sent off to route handlers
+
+
+- Request comes in -> Req -> Req sen to route handler
+
+- Req -> cookie session(extracts cookie data) -> Passport (pulls user ID out of the cookie) -> deserializeUser (funct. we write to turn user id into a user) -> user model instance added to req. object as 'req.user'
+
+- cookie session and passport are middlewares
+
+- we may want to authenticate every route handler, so rather than adding some top logic on every route handler, just wire-up middleware on the incoing req. and then all the req. coming to our app will be automatically authenticated.
+
+
+> How express works?
+ - req from browser -> app -> app object is created by express lib - express() -> app -> middleware #1 -> middleware #2 -> get/post/delete/put -> response
+
+ - res.send(req.session) gives the cookie data which is user ID that is extracted by passport
+
+ - Our lib that we installed to manage the data by cookie is called cookie session
+
+
+- Diff b/w cookie-session and express-session libraries?
+By cookie session, we can assign some data to cookie as a middleware. Then take all the data and assign it to session property
+
+___________________________________________
+> Sessions with express
+
+All we care about is identifying the current user (the person who's making the request).
+
+- Cookie 'is' the session 
+userId = 456 -> take the userId, find the user, set it on req.session
+
+
+- Cookie references a session
+sessionId = 123 -> takes sessionId, look up all relevant info from a 'session store' - can hold arbitrary amounts of info
+
+
+____________________
+
+Main diff b/w cookie session and express session is how data is stored inside a cookie. Express works by storing a reference to a session inside cookie. It will store an id to a session. While cookie session holds all the data directly inside the cookie. With express session we can store as much data as we want but with cookie we're limited to 4kB. Now since we only car about userId, we dont have any prob with size limit.
+
+Notes:
+- set-cookie can be seen inside response/request header in network tab of console.

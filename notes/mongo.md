@@ -95,105 +95,91 @@ Server compares if both email/pass combinations are same, if yes, the user is lo
 
 We need to find some unique identifying token in the user's Google profile. Is that consistent b/w logins? Use that to decide if the user is same.
 
-
 Google allows to associate multiple email addresses with your account, so over time a user may not have same email. So, email is not unique identifying token. Rather, use user ID, which is `Google ID` for a particular user. It doesnt change over time.
 
 OAuth only service/purpose is to give us this unique identifying token, for making followup requests.
 
 Anytime a user comes from google, we will assume they might have already signed up to our application.
 
-
 > Flow chart
 
 Browser(Signup with google profile) => Server(creates a new record of the user in db) => MongoDB(Creates new record of user123) => record list of surveys made by the user => After creating new record sends response back, cookie stating user id 123 => set cookie: 'abddjsghg' => login!
 
-
-
 Browser(logout) => server(unsets cookie) => response setcookie: '' => logout!
-
 
 Browser(Signup with google profile) => Server (checks the exisiting user records in db) => Mongo(find the user record) => server sends response of setcookie: 'ahjbdhdkj', with userid 123
 
-
-
 ### Intro to MongoDB
-Till now we know how to use OAuth to uniquely identify users inside of our application.
 
+Till now we know how to use OAuth to uniquely identify users inside of our application.
 
 React app <--> http req (JSON) <--> express/node API -> mongoose.js -> mongoDB
 
 Mongoose is a lib which makes working with mongoDB easier.
 
-
 ### How mongo internally stores info
 
-MongoDB -> 
+MongoDB ->
+
 - Internally stores records into diff collections, every diff collection can have many records. Inside one mongoDB instance we can have collection of users, posts, payments
 
 - Collection, contains many records
 
-
 Users collection can have many records. Every record contains a little snippet of JSON/ js object(key:value pair) -
 {
-    id: 1,
-    name: 'anna',
-    height: 150
+id: 1,
+name: 'anna',
+height: 150
 }
 
 {
-    id: 2,
-    name: 'alex'
-    age: 30
+id: 2,
+name: 'alex'
+age: 30
 }
 
 {
-    id: 3,
-    name: 'bill'
+id: 3,
+name: 'bill'
 }
 
 {
-    id: 4,
-    name: 'sam'
-    height: 167
+id: 4,
+name: 'sam'
+height: 167
 }
 
 {
-    id: 5
-    name: 'zane'
+id: 5
+name: 'zane'
 }
-
 
 - Important fact about mongoDB is its schema-less. In other words, inside of one single collection, every record can have its own distinct set of properties.
 
 - This is in contrast to traditional db, like SQL, postgres or relational db, where every recors has exact same properties.
 
-
 ### What mongoose is doing? How it relates to mongoDB?
 
 JS world -> This is from Mongoose(Model class) -> MongoDB world(Collection)
 
+JS world -> This is from Mongoose (Model instance) -> MongoDB world({id: 1, name: 'alex'} {id: 2, name: 'sam', age: 30} {id: 3, name: 'bill} )
 
-JS world  -> This is from Mongoose (Model instance) -> MongoDB world({id: 1, name: 'alex'} {id: 2, name: 'sam', age: 30} {id: 3, name: 'bill} )
-
-
-- Model class 
-It is created with mongoose represents an entire mongoDB collection. It is used to access a single collection inside mongoDB. 
-Model class has some func attached to it, which are used to work with an entire collection.
-Eg: creating new record, or searching all the records.
+- Model class
+  It is created with mongoose represents an entire mongoDB collection. It is used to access a single collection inside mongoDB.
+  Model class has some func attached to it, which are used to work with an entire collection.
+  Eg: creating new record, or searching all the records.
 
 - Model instance
-Mongoose gives access to model instances, which are javascript objects that represent single records inside the collection.
+  Mongoose gives access to model instances, which are javascript objects that represent single records inside the collection.
 
 So in practise, we have one model class representing one collection, and many model instances representing each single records inside the mongoDB collection.
-
-
 
 ### MongoDB setup
 
 2 diff ways to set in own express apps.
 
-1. Either install a local copy of mongoDB on personal laptop/desktop
-2. Or use remotely hosted instance of mongoDB
+1.  Either install a local copy of mongoDB on personal laptop/desktop
+2.  Or use remotely hosted instance of mongoDB
 
 Here, we'll use the latter. Reason: Its far easier to install mongoDB and create a local copy when it is remotely hosted.
 
@@ -203,26 +189,24 @@ Therefore, use a third-party service to host a copy of mongoDB. So on this remot
 Our local computer -> React app <-> express/node api -> mongoose.js -> mongoDB(hosted remotely)
 ```
 
-
-Create remotely hosted copy/instance of mongoDB 
+Create remotely hosted copy/instance of mongoDB
 `https://mlab.com/`
 
-
-
 ### Connecting mongoose to mongo
-- Install mongoose on express api and then connect with the remotely hosted mongoDB
-`mongoose.connect(keys.mongoURI);`
 
+- Install mongoose on express api and then connect with the remotely hosted mongoDB
+  `mongoose.connect(keys.mongoURI);`
 
 Mongo and mongoose installed!
+
 - Need to be able to identify users who signup and return to our app. We want to save the 'id' property of their google profile.
 - Use mongoose to create a new collection in mongo called 'users'
 - Collections are created by making a model class
 - When user signs in, save new record to the 'users' collection
 
-
 ### Mongoose model classes
-- With mongo we can have many random arbitrary properties on any record of a given collection. 
+
+- With mongo we can have many random arbitrary properties on any record of a given collection.
 - However, mongoose wants to know all the diff properties that our record will have inside our db, and it requires to tell ahead of time with `Schema` object.
 - So when we use mongoose we lose ability of diff properties on each individual record, since it wants to know all the diff properties.
 
@@ -245,9 +229,8 @@ const userSchema = new Schema({
 mongoose.model('users',userSchema);
 ```
 
-
-
 ### Saving model instances
+
 Create new record to `users` collection anytime new user signs up our app.
 
 require mongoose inside passport.js, call the mongoose.model('users') and assign it new cont object User
@@ -284,12 +267,11 @@ Therefore, in index.js keep the require statements in following order -
 require("./models/User");
 require("./services/passport");
 
-
 Note:
 All the deprecation warnings in server is due to mongoose interaction with mongoDB, so ignore them.
 
-
 ### Mongoose queries
+
 - Create only one user record for a given googleID
 
 - Send req to google with 'code' included
@@ -322,9 +304,7 @@ passport.use(
     }
   )
 );
-
 ```
-
 
 Whenever we reach to mongoDB, be it for search thru collection or saving a new record or edit or delete exisiting record, we're initiating an async action
 
@@ -350,19 +330,17 @@ Whenever we reach to mongoDB, be it for search thru collection or saving a new r
 );
 ```
 
-
-
 > Notes
 
-Q) How would you (or I) handle the use case where someone would be logging in with multiple Auths? How would we prevent the strategy from searching the db and creating an unnecessary new User in the case that they had auth'd with Google and now are auth'ing with IG? 
+Q) How would you (or I) handle the use case where someone would be logging in with multiple Auths? How would we prevent the strategy from searching the db and creating an unnecessary new User in the case that they had auth'd with Google and now are auth'ing with IG?
 
-> Only way to handle this is to store the email given to you by the provider.  Remember that with google, in the profile object we got a list of the user emails.  We could store that list, then whenever someone signs in with another provider, check to see if that provider's emails have been used before from another provider.  
+> Only way to handle this is to store the email given to you by the provider. Remember that with google, in the profile object we got a list of the user emails. We could store that list, then whenever someone signs in with another provider, check to see if that provider's emails have been used before from another provider.
 
-The thing to keep in mind is that this opens you up to account highjacking.  For example, imagine the following:
+The thing to keep in mind is that this opens you up to account highjacking. For example, imagine the following:
 
-- Bill signs up to our service with Google.  Bill's google profile shows an email of bill@gmail.com
+- Bill signs up to our service with Google. Bill's google profile shows an email of bill@gmail.com
 
-- Hacker Jill then creates an account on Instagram and enters a fake email address of bill@gmail.com.  
+- Hacker Jill then creates an account on Instagram and enters a fake email address of bill@gmail.com.
 
 - Hacker Jill then comes to our site and tries to oauth through instagram
 
@@ -372,21 +350,19 @@ To guard against this, do the following:
 
 - Bill signs up with Google, and we create a new account that contains an email of bill@gmail.com
 
-- Bill logs out, then comes back to our site and attempts to oauth with Instagram.  Let's imagine that instagram also lists bill@gmail.com
+- Bill logs out, then comes back to our site and attempts to oauth with Instagram. Let's imagine that instagram also lists bill@gmail.com
 
 - We must detect that Bill already has an account tied to google
 
 - After detecting that Bill already has a user account, we will only allow Bill to auth through Instagram and link this account if Bill is signed in with Google
 
-In other words, only allow account linking if the user is already signed in with the other account.  That proves that Bill is who they say they are and that both the Instagram and Google accounts belong to him.
+In other words, only allow account linking if the user is already signed in with the other account. That proves that Bill is who they say they are and that both the Instagram and Google accounts belong to him.
 
-I know this sounds hard, but it isn't as bad as it sounds.  To pull it off, every use model record store the the list of emails from each provider that the user auths with.  Then, in each strategy you wire up, check to see if the user's email is already in use.  If it is, check to see if the user is logged in (by looking at req.user).  If they are, allow them to pass, otherwise tell them the email is in use and that they should go sign in with the other oauth provider first.
-
-
+I know this sounds hard, but it isn't as bad as it sounds. To pull it off, every use model record store the the list of emails from each provider that the user auths with. Then, in each strategy you wire up, check to see if the user's email is already in use. If it is, check to see if the user is logged in (by looking at req.user). If they are, allow them to pass, otherwise tell them the email is in use and that they should go sign in with the other oauth provider first.
 
 ### Passport Callbacks
 
-Google strategy gives us this callback - 
+Google strategy gives us this callback -
 
 Steps:
 
@@ -397,7 +373,7 @@ Steps:
 - If yes, skip user creation!
 
 - Call 'done' with the user that was created or found!
-(Tell passport that we have finished creating a user & it should now resume the auth process)
+  (Tell passport that we have finished creating a user & it should now resume the auth process)
 
 `done func.` tell passport that we're finished executing the code, resume the auth flow.
 
@@ -427,25 +403,21 @@ passport.use(
     }
   )
 );
-
 ```
 
-
-
 ### Encoding users
+
 In the OAuth flow, the last step is, after the user record has been created, server sends a response back with the cookie (token containing some identifying piece of info) having the user ID which will be include in all the flowup requests from the browser to the server.
 
 > Cookie flowchart:
- 
- - Browser(click sign in with google profile) => Server (Looks like you've same google profile ID as user123. Take a token that says you're user123 ) => Call `serializeUser` with the user to generate the identifying piece of info => set-cookie: 'asjkahlds' => response to Browser
 
+- Browser(click sign in with google profile) => Server (Looks like you've same google profile ID as user123. Take a token that says you're user123 ) => Call `serializeUser` with the user to generate the identifying piece of info => set-cookie: 'asjkahlds' => response to Browser
 
-- SerializeUser is a func automatically called by passport with our user model that we've just fetched. After generating piece of info, it is passed back to passport and passport automatically stuff that token into user's cookie
+* SerializeUser is a func automatically called by passport with our user model that we've just fetched. After generating piece of info, it is passed back to passport and passport automatically stuff that token into user's cookie
 
- - Browser(list of posts?) => included the cookie: 'asaldjsd' => Server(takes identifying piece of info from cooki, pass into `deserializeUser` to turn it into a user) => Ah, user123. Here's your list of posts => posts => browser
+* Browser(list of posts?) => included the cookie: 'asaldjsd' => Server(takes identifying piece of info from cooki, pass into `deserializeUser` to turn it into a user) => Ah, user123. Here's your list of posts => posts => browser
 
-
-_____________________________________________________
+---
 
 ```
 //user model which we have retrived from the db
@@ -458,49 +430,44 @@ passport.serializeUser((user, done) => {
 });
 ```
 
-> _id property inside mongo collection's record is a unique identifier automatically generated by mongo.
+> \_id property inside mongo collection's record is a unique identifier automatically generated by mongo.
 
 Reason why we're using it?
-Because we can be using multiple auth providers like fb, twitter etc., and if we have them, we can't always assume that user has a google ID. But we can assume that every user will have an _id (user.id)
-
+Because we can be using multiple auth providers like fb, twitter etc., and if we have them, we can't always assume that user has a google ID. But we can assume that every user will have an \_id (user.id)
 
 > `OAuth's only purpose is to allow someone to sign in. After that, we use own internal ID's`
 
 - `Google Oauth flow` => google profile id -> identifies a user coming to us from the OAuth flow
 - `Incoming req with cookie` => user model instance id -> identifies a user who is stored in the database
 
-
 > Notes:
 
-'User' refers the users model class, while 'user' refers to instance of a particular user. 
+'User' refers the users model class, while 'user' refers to instance of a particular user.
 
-const user = new User({googleId: profile.id}); 
-which essentially says, create a new instance of the User (model class) with the googleId property set = profile.id. 
+const user = new User({googleId: profile.id});
+which essentially says, create a new instance of the User (model class) with the googleId property set = profile.id.
 
+---
 
-_______________________________________________________
-
-new User({ googleId: profile.id })  // this line creates the new User instance in User model
+new User({ googleId: profile.id }) // this line creates the new User instance in User model
 .save()
-.then(user => done(null, user));   //why we used a promise here and pass user?
+.then(user => done(null, user)); //why we used a promise here and pass user?
 
-We need the .then() promise to the pass the user back to the BROWSER. 
+We need the .then() promise to the pass the user back to the BROWSER.
 
 There are two different things happening here:
 
-1. A new user is being instantiated and then saved in our DATABASE
+1.  A new user is being instantiated and then saved in our DATABASE
 
 then...
 
-2. Once the saving of the user is complete, it is being passed back to the BROWSER using the promise that you just pointed out.
+2.  Once the saving of the user is complete, it is being passed back to the BROWSER using the promise that you just pointed out.
 
 to continue forward...
 
-3. This entire user is then automagically passed to the 'req' parameter by passport (we don't have to do anything there). That's why in the routes file where we create an api at '/api/current_user' we do the following: 
+3.  This entire user is then automagically passed to the 'req' parameter by passport (we don't have to do anything there). That's why in the routes file where we create an api at '/api/current_user' we do the following:
 
-..res.send(req.user)  // we make the user object and its contents available to our front end. The req.user would have been empty if we would not have used the promise that you pointed out. 
-
-
+..res.send(req.user) // we make the user object and its contents available to our front end. The req.user would have been empty if we would not have used the promise that you pointed out.
 
 ### Deserialize User
 
@@ -517,14 +484,12 @@ passport.deserializeUser((id, done) => {
 
 Instruct passport to manage all of the authentication by using cookie. Passport if basic set of helpers to handle authentication. It has many ways to keep track of user, one of which is cookies.
 
-
-
 ### Enabling cookies
+
 Out of the box, express has no idea of how to handle cookies. So, install helper lib `cookie-session` to manage cookies in our application.
 
 - Passport will keep track of user authentication by using cookies
 - Required passport and cookie-session lib inside index.js
-
 
 ```
 // tells express to use cookies inside app
@@ -537,29 +502,25 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
-
 ```
 
-- maxAge - how long can cookie exist in browser it is automatically expired. Eg 30 days. Now pass it in milliseconds => 
-30 * 24 * 60 * 60 * 1000
+- maxAge - how long can cookie exist in browser it is automatically expired. Eg 30 days. Now pass it in milliseconds =>
+  30 _ 24 _ 60 _ 60 _ 1000
 
 - keys to encrypt the cookie, so that no one can manually change the user ID. You can use mutiple keys and passport will randomly use one to encrypt the cookie.
-Keeps this key inside keys.js file
-
-
+  Keeps this key inside keys.js file
 
 ### Testing authentication
+
 End result of the auth flow =>
 
 Request comes in -> Request -> Request sent to route handler
 
-Request -> Cookie-session(extracts/decrypt cookie data) -> passport(pulls user id our of the cookie data) -> deserializeUser(funct we write to turn user id into a user) -> User model instance added to req. object as 'req.user' 
+Request -> Cookie-session(extracts/decrypt cookie data) -> passport(pulls user id our of the cookie data) -> deserializeUser(funct we write to turn user id into a user) -> User model instance added to req. object as 'req.user'
 
 -> Req. object is then passed into express route handler
 
-
 Create new route handler to inspect the req.user property. If its present, means authentication is working.
-
 
 ```
 //route handler to test someone who is logged into the application can get access to user record
@@ -569,3 +530,17 @@ Create new route handler to inspect the req.user property. If its present, means
 ```
 
 > On localhost:500/api/current_user, user details can be seen which are save in the db
+
+### Logging out users
+
+- Create a route handler
+- Whenever a user who is authenticated makes a GET req to the route `/api/logout`, log the user out of the application
+
+```
+  //logout route handler
+  app.get("/api/logout", (req, res) => {
+    //passport attaches this func to req object
+    req.logout(); //takes the cookie which contains user ID and kills the ID
+    res.send(req.user);
+  });
+```

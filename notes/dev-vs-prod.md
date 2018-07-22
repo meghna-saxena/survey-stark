@@ -110,3 +110,7 @@ Now, in our case we;re fine with heroku proxy, so add a config option to google 
 Add this additional property `proxy: true` inside callbackURL
 
 The other solution is to give the entire/absolute url inside the callback url of google strategy
+
+
+Notes:
+Your server is at herokuapp.com not heroku

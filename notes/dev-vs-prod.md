@@ -23,4 +23,21 @@ index.js -> config/keys.js -> are we doing dev/prod? ->
 prod -> use env variables
 dev -> config/dev.js <- dont commit this
 
-- we're going to have separate db, separate googleapi's and separate keys
+- we're going to have separate db, separate google api account and separate keys
+
+
+## Generating production resources
+
+New db for production
+- Create a new database on mlab.com
+- Create a service a/c that can access to db so that our copy of mongoose can login and make changes to db, so take the connection URI
+- Add new database user
+
+
+New google api a/c for prod
+- new project
+- enable api, enable google+ api 
+- Generate credentials from left sidebar -> OAuth clientID
+- consent screen -. product name
+- App type - webapp
+- Authorized javascript origins and authorized redirect uri's -> redirect to running heroku instance

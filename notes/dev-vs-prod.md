@@ -66,3 +66,10 @@ if (process.env.NODE_ENV === 'production') {
     // we're in development, return the dev keys
 }
 ```
+
+
+## Version control scheme
+whenever prod.js containing keys for prod is required on heroku, values of each keys   are pulled from heroku environment variables. So for each key, we'll write `process.env...` which mean look for env variables
+
+- prod.js is committed on github
+Reason: when we push our project to heroku, we want the prod.js file, so essentially it gives all the keys from env variables assigned in prod.js

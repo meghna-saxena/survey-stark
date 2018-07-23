@@ -32,3 +32,9 @@ Because CRA is the best way to build react apps. It has pre-built config already
 
 
 ## Running the client and server
+
+- How to run both the servers at the same time?
+ - - Split the terminal window, and run express server by `yarn run dev` and react server by `yarn start` commands.
+ - - Or use a `concurrently` package to run 2 separate servers by single command.
+
+ Inside server (package.json), configure the client and server scripts, and add a dev script saying to run concurrently both the servers.

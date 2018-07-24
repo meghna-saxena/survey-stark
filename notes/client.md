@@ -65,3 +65,24 @@ Because CRA is the best way to build react apps. It has pre-built config already
     }
   },
 ```
+This will automatically redirect to express server.
+
+
+## Create react app's proxy
+- When we use relative link, browser automatically append the current domain infront of link, which is localhost:3000
+- We get a redirect_uri_mismatch, since google thinks we want to navigate to `localhost:3000/auth/google/callback`, so add this link as authorized callback in google developer console.
+- In prod, however, the current domain will append with the relative link so it will work just fine!
+
+> Dev mode Diagram
+
+Browser -> bundle.js -> create-react-app served by `react server` 
+Browser -> data from API -> proxy in `react server` -> node/express api/server
+
+
+> In production
+- React server doesn't exist!
+- In prod, CRA takes all the files, run webpack babel, and save the final prod build of our app in the build folder
+
+Browser -> bundle.js -> Node/express API -> public assets
+Browser -> data from API -> node/express api/server
+

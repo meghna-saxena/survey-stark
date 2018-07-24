@@ -7,7 +7,6 @@ const keys = require("../config/keys");
 //now User object is model class
 const User = mongoose.model("users");
 
-
 //user model (model instance) which we have retrived from the db
 //by the callback func of google strategy
 passport.serializeUser((user, done) => {
@@ -17,7 +16,6 @@ passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
-
 //Take the id stuffed in the cookie and turn it back into an actual user model.
 passport.deserializeUser((id, done) => {
   //findByID finds record of a particular id
@@ -25,7 +23,6 @@ passport.deserializeUser((id, done) => {
     done(null, user);
   });
 });
-
 
 // OAuth flow by passport
 passport.use(
@@ -36,21 +33,19 @@ passport.use(
       callbackURL: "/auth/google/callback",
       proxy: true
     },
-    (accessToken, refreshToken, profile, done) => {
+    async (accessToken, refreshToken, profile, done) => {
       //initiate mongoose query
       //look thru User collection and find first record with googleId: profile:id
-      User.findOne({ googleId: profile.id }).then(existingUser => {
-        if (existingUser) {
-          // we already have a record with a given profile id
-          done(null, existingUser);
-        } else {
-          // we dont have a record with the id, make a new record
-          //new model instance to create individual records
-          new User({ googleId: profile.id })
-            .save() //saves in the database
-            .then(user => done(null, user));
-        }
-      });
+      const existingUser = await User.findOne({ googleId: profile.id });
+      if (existingUser) {
+        // we already have a record with a given profile id
+        return done(null, existingUser);
+      }
+
+      // we dont have a record with the id, make a new record
+      //new model instance to create individual records
+      const user = await new User({ googleId: profile.id }).save(); //saves in the database
+      done(null, user);
     }
   )
 );

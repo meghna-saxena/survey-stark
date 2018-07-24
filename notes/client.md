@@ -81,8 +81,42 @@ Browser -> data from API -> proxy in `react server` -> node/express api/server
 
 > In production
 - React server doesn't exist!
-- In prod, CRA takes all the files, run webpack babel, and save the final prod build of our app in the build folder
+- In prod, CRA takes all the files, run webpack babel, and save the final prod build of our app in the build folder. React code will be wrapped up into a bundle.js asset that will be served by the Node / Express server. 
 
 Browser -> bundle.js -> Node/express API -> public assets
 Browser -> data from API -> node/express api/server
 
+
+## Why this architecture?
+Why we're not using 2 distinct servers to serve their purpose in dev mode, why is data/api not served from the express server directly without using proxy at CRA server level? Why we use proxy?
+
+1. Issue #1
+Since we use cookies for auth.
+Once the user goes in auth flow, set-up some info (user id)  in cookie which identifies user and every followup req will contain that user id
+
+When a browser at localhost:3000 makes AJAX req to -
+ - - Server hosted at localhost:3000 -> Cookies will be included in the req
+ - - Server hosted at localhost:5000 -> Cookies will NOT be included in the req! (by default) because browser is currently pointed at localhost:3000
+
+ This is purely a security issue. Browser assumes your app has malicious javascript. 
+ Different ports count as diff domains.
+
+> This issue can be solved by proxy server. Since browser will redirect at localhost:3000, but proxy will rediret to localhost:5000. So cookies is included by browser and prxy forward the req and cookie to express api
+
+
+> Note: In prod, there's no cross-domain issue at all!
+
+
+2. Issue #2
+When browser at localhost:3000 makes req to server located at localhost:3000 - No issue
+When browser at localhost:3000 makes req to server located at localhost:5000 - A diff domain/port, due to browser security reasons considered as a CORS request! 
+
+- CORS - Cross origin resource sharing
+- Proxy helps to prevent this problem.
+
+________________________________________________________
+
+## Complete OAuth flow
+________________________________________________________
+
+User clicks sign up -> broswer sees its relative path `/auth/google` so it automatically apends `localhost:3000/auth/google` -> req goes to other route which is CRA server + proxy -> proxy copies req and sends req to new route `localhost:5000/auth/google` -> req reaches to express api -> start oauth flow for google. On return, go to callback URL `/auth/google/callback` which is specified in  google strategy -> response sent back to proxy and sent back to browser -> On browser when we get redirected by google the relative path becomes `localhost:3000/auth/google/callback` -> goes to google.com which shows consent screen for app permission, the callback URL has the 'code' of the app -> on giving permission -> req sent back to localohst:3000 -> again req sent to proxy -. prxy sends to express api -> express takes user details -> response back logged in/cookies generated -> sent back to "/"

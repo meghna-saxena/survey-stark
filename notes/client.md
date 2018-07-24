@@ -38,3 +38,30 @@ Because CRA is the best way to build react apps. It has pre-built config already
  - - Or use a `concurrently` package to run 2 separate servers by single command.
 
  Inside server (package.json), configure the client and server scripts, and add a dev script saying to run concurrently both the servers.
+
+
+ ## Routing stumbling block
+ - Show a link in reap app, saying login by google Oauth
+ - We know that for going in OAuth flow we need `localhost:5000/auth/google`
+ - Express server has auth flow on `/auth/google`
+
+ - If you provide a relative link in the react app => `<a href="/auth/google">Sign in with Google</a> `, not specifying the domain. Then browser automatically assumes that you are trying to visit that relative path on the same domain that you're currently visiting, which currently is localhost:3000
+
+ - However oauth flow is on express server which is hosted on port 5000
+
+ - To solve this problem, manually specify the domain. 
+ `<a href="http://localhost:5000/auth/google">Sign in with Google</a> `
+
+ - But this link only work on development env on our local machine. In prod, when the app is deployed on heroku, change the address to heroku address.
+ - So essentially to make the app working, whenever the app is deployed, dynamically find every <a> tag, every API req and flip it from localhost:5000 over to heroku app address. - And this is a `stumbling block`
+
+- So, for a good codebase, we just want to write the relative path `/auth/google` and not care if it's hosted on localhost:5000 api or heroku app api. We can do this by writing helper func giving a check to see if we're in prod or dev env
+
+- But instead we will do a small fix to make the backend and frontend server work together, by configuring in package.json of client directory =>
+```
+"proxy": {
+    "/auth/google": {
+      "target": "http://localhost:5000"
+    }
+  },
+```

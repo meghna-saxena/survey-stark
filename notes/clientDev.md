@@ -181,3 +181,30 @@ ReactDOM.render(
 );
 
 ```
+
+
+## Auth reducer
+
+```
+export default function(state = {}, action) {
+  //Since state initially is undefined, so set it to an empty obj {}
+  switch (action.type) {
+    default:
+      return state;
+  }
+}
+
+```
+
+> combineReducers in reducers/index.js
+
+```
+import { combineReducers } from "redux";
+import authReducer from "./authReducer";
+
+export default combineReducers({
+  auth: authReducer
+});
+
+//whatever keys we give to combineReducers are going to represent the keys of our state object.
+```

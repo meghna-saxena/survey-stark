@@ -86,3 +86,52 @@ async (accessToken, refreshToken, profile, done) => {
     }
   )
 ```
+
+
+## Frontend tech
+
+Server setup -> authentication flow(server) -> client setup -> auth on client -> add survey APIs on server -> add survey stuff on client
+
+Our frontend routes -
+
+projectname.com - Header, landing components
+projectname.com/surveys - Header, dashboard, surveylist, surveylist item components
+projectname.com/surveys/new - surveryform, formfield component
+
+
+## Client react setup
+- Deleted all the files inside client/src folder except registerServiceWorker.js
+
+> Building from scratch:
+
+- Essentially 2 root files. 
+ - Index.js contains the initial bootup logic of react and redux.So it contains the redux logic as well
+ - App.js is a component for rendering on screen, so it contains the logic of react-router
+
+index.js (Data layer control) -> App.js(Rendering layer control)
+
+
+> Components overview:
+
+index -> app -> Landing/Header/Dashboard/SurveyNew
+Dashboard -> SurveyList -> SurveyListItem
+SurveyNew -> SurveyField
+
+
+- Install following dependencies - redux, react-redux, react-router-dom
+- Create index.js and render a root component to DOM
+
+
+> Notes:
+  - If a given file is exporting class or a react component of any type, whether functional or class based component, label the file with capital initial letter. But if the file returns a function or just a series of func. label it with lowercase.
+
+  - We use imports statement in frontend because webpack and babel support es16 modules whereas on backend nodejs supports only commonjs modules till now.
+
+  - <App /> is component's instance
+
+  - QuerySelector vs GetElementById? What is the diference between:
+`ReactDOM.render(<App />, document.querySelector('#root')); ` and `ReactDOM.render(<App />, document.getElementById('root'));` 
+
+   - querySelector is used to query any element based on a class, ID, or type, similar to how jQuery works. Both do the same thing, but getElementById is more specific, so it is slightly better for performance than querySelector. 
+   - QuerySelector  => return any elements (class, div, id, etc..)
+   - getElementById => strictly return Id element only

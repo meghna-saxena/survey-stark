@@ -135,3 +135,49 @@ SurveyNew -> SurveyField
    - querySelector is used to query any element based on a class, ID, or type, similar to how jQuery works. Both do the same thing, but getElementById is more specific, so it is slightly better for performance than querySelector. 
    - QuerySelector  => return any elements (class, div, id, etc..)
    - getElementById => strictly return Id element only
+
+
+
+## Redux Review
+
+React, redux, react-redux
+
+ Store -> Provider -> App -> Dashboard -> SurveyList -> SurveyListItem
+
+  - Provider is a component that makes the store accessible to every component in the app. 
+
+ > State management
+
+ Redux store -> combineReducers -> 
+  - authReducer (records whether or not the user is logged in) 
+ OR 
+  - surverysReducer (records a list of all surveys user has created)
+
+
+- To determine current state or change the state, call an action creator which dispatches an action. 
+- Action is sent to all the reducers inside the app.
+- Those reducers are combined together by combinerReducers call which updates the state in redux store.
+
+
+
+## Redux Setup
+
+```
+import { Provider } from "react-redux";
+import { createStore, applyMiddleware } from "redux";
+
+//create new instance of redux store
+// 1st arg is dummy reducer
+//2nd arg is initial state of app, imp in serverside rendering, but right now just put empty obj {}
+//3rd arg is middleware
+
+const store = createStore(() => [], {}, applyMiddleware());
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.querySelector("#root")
+);
+
+```

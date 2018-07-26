@@ -208,3 +208,9 @@ export default combineReducers({
 
 //whatever keys we give to combineReducers are going to represent the keys of our state object.
 ```
+
+
+## React router setup
+
+
+- Wrap the root component with <BrowserRouter>

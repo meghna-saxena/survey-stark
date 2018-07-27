@@ -403,3 +403,20 @@ export default (state = null, action) => {
   }
 };
 ```
+
+
+
+## Accessing state in the header
+
+- Hookup header comp to redux store and pull out auth piece of state.
+- call mapStateToProps to call the entire state obj from redux store and pass it to header component as props.
+
+```
+//used es6 destructuring
+
+function mapStateToProps({ auth }) { //can be replaced by func ...(state) {return auth: state.auth}
+  return { auth };
+}
+
+export default connect(mapStateToProps)(Header);
+```

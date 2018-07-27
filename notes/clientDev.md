@@ -468,3 +468,7 @@ Here we're choosing the full http req for logout
     res.redirect("/");
   });
   ```
+
+
+  ## Landing Component
+  

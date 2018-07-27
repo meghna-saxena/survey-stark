@@ -420,3 +420,10 @@ function mapStateToProps({ auth }) { //can be replaced by func ...(state) {retur
 
 export default connect(mapStateToProps)(Header);
 ```
+
+
+
+## Header content
+- Created a renderContent() method and made the switch cases for null, login and logout
+
+

@@ -262,3 +262,41 @@ CRA -> Webpack -> index.js -> App.js + materialize.css
 - Hook up materialze css inside project
     - import 'materialize-css/dist/css/materialize.min.css'; inside index.js
     - when you dont give a relative path, webpack assumes automatically that you're referring to an npm module installed inside node_modules directory
+
+- Materialize css assumes you have atleast one root comp called container, it then provide some margin on the sides.
+
+
+
+## Current user API
+ - How to decide if user is logged in?
+ Comp -> action creator makes api req -> when req returns -> dispatch action -> sent to reducers -> updates state in store
+
+ - So create action creator which makes ajax req to the route handler '/api/current_user'
+
+
+
+## Additional proxy rules
+
+React app boots up -> app component calls action creator -> func k/a fetchUser axios.get('/api/current_user') -> express API -> response (user model) -> use lib redux-thunk to dispatch(action) -> auth reducer -> new 'auth' piece of state -> update state -> header rerender 
+
+- Hookup reduxThunk with createStore in index.js as middleware
+
+`const store = createStore(reducers, {}, applyMiddleware(reduxThunk));`
+
+- Remember action creator are where we initiate change inside of redux side of our app.
+- Actions are plain JavaScript objects. Actions must have a type property that indicates the type of action being performed. Types should typically be defined as string constants
+
+- Fetch is kind of a pain to use - it doesn't include cookies by default on requests, it has weird error handling, and you have to do that nasty 'res.json()' step before accessing the response.  Yes, we could easily write a wrapper around fetch to fix it up, but its just easier to use axios instead.  Axios essentially contains the code we'd be writing by hand anyways!
+
+- set another proxy
+
+```
+"proxy": {
+    "/auth/google": {
+      "target": "http://localhost:5000"
+    },
+    "/api/*": {
+      "target": "http://localhost:5000"
+    }
+  },
+```

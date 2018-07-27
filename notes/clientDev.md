@@ -440,3 +440,31 @@ app.get(
     }
   );
 ```
+
+
+## Redirect on logout
+- When user first logs in, set-cookie to some token which is included in any followup request.
+- When user logs out, that cookie value is unset
+
+Method:
+
+    - Traditional browser behavior
+        - Full http request -> /api/logout ->  will cause the entire browser page to refresh.
+    - Handle with react& redux side of app
+        - AJAX request -> /api/logout ->  No page refresh, but we have to handle action creators, reducer etc. and redirect to landing page
+        - Much faster process
+
+Here we're choosing the full http req for logout
+
+- Now when user is logout, redirect the user to root route(landing page) of app.
+
+```
+//logout route handler
+  app.get("/api/logout", (req, res) => {
+    //passport attaches this func to req object
+    req.logout(); //takes the cookie which contains user ID and kills the ID
+    // res.send(req.user); // this is empty
+
+    res.redirect("/");
+  });
+  ```

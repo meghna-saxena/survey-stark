@@ -21,7 +21,9 @@ module.exports = app => {
   app.get("/api/logout", (req, res) => {
     //passport attaches this func to req object
     req.logout(); //takes the cookie which contains user ID and kills the ID
-    res.send(req.user);
+    // res.send(req.user); // this is empty
+
+    res.redirect("/");
   });
 
   //route handler to test someone who is logged into the application can get access to user record

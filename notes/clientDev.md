@@ -280,7 +280,6 @@ CRA -> Webpack -> index.js -> App.js + materialize.css
 React app boots up -> app component calls action creator -> func k/a fetchUser axios.get('/api/current_user') -> express API -> response (user model) -> use lib redux-thunk to dispatch(action) -> auth reducer -> new 'auth' piece of state -> update state -> header rerender 
 
 - Hookup reduxThunk with createStore in index.js as middleware
-
 `const store = createStore(reducers, {}, applyMiddleware(reduxThunk));`
 
 - Remember action creator are where we initiate change inside of redux side of our app.
@@ -300,3 +299,44 @@ React app boots up -> app component calls action creator -> func k/a fetchUser a
     }
   },
 ```
+
+
+## Basics of Redux Thunk
+
+- Redux expects that any action creator will instantly return an action.
+- An action is a js object with a type property and optionally a payload.
+- Purpose of redux thunk is to allow us to write a.c that break the specific requirement for immediately returning an action.
+- Dispatch function -> dispatch sends the acion to diff reducers in the store, causing them to instantly recalculate the app state.
+- Dispatch func is a funct. belong to redux store
+- So a.c instead of returning an action, they produce an action which is forwarded to dispatch func. We get an access to this function.
+
+
+Instead of returning an action like this -
+
+```
+const fetchUser = () => {
+  const request = axios.get("/api/current_user");
+  return {
+      type: FETCH_USER,
+      payload: request
+  }
+};
+```
+
+Redux thunk gives access to dispatch func, and then we can manually control when we want to dispatch an action -
+- Since req is async
+
+```
+const fetchUser = () => {
+  return dispatch => {
+    axios
+      .get("/api/current_user")
+      .then(res => dispatch({ type: FETCH_USER, payload: res }));
+  };
+};
+
+```
+
+
+Note:
+Redux Thunk allows your action creators to return a function instead of returning an action object. This function gives you access to the dispatch function, and allows you to dispatch multiple actions as you please. You can dispatch actions when certain conditions are met. Redux Promise on the other hand, allows your action creators to return a promise as the payload. You can use both Redux Thunk and Redux Promise in your applications based on the situation. If there is a lot of complexity or a need for conditonals, Redux Thunk is the way to go. But let's say you have multiple promises and also have the need for conditionals at the same time, you will be using both

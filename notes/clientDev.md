@@ -1,6 +1,7 @@
 # Developing the Client Side
 
 ## Aync/Await Syntax
+
 ES2017 syntax
 
 - Implementation
@@ -8,7 +9,8 @@ ES2017 syntax
 
 - - Async/await still works on promises, but it makes the code look synchronous, though behind the scenes it's still asynchronous working with promises.
 
-Example: 
+Example:
+
 ```
 function fetchAlbums() {
     fetch('https://rallycoding.herokuapp.com/api/music_albums')
@@ -27,7 +29,6 @@ fetchAlbums();
 // - .then(res => res.json()) fetch resolves its promise with an object that represents the underlying request. You can get the real json response by calling '.json()' on it. This returns another promise
 // - .then(json => console.log(json)) after getting the json, console log it
 
-
 // New syntax for handling promises easily
 
 ```
@@ -42,17 +43,16 @@ fetchAlbums();
 
 //put async keyword infront of function declaration, tells js that this func has async code. Infront of promises add await keyword
 
-
 How to know if a function returns a promise?
 Assign the return value in a variable and console log it, and you'll see the type is a Promise.
 
-
 ## Refactoring with async/await
+
 - Database interaction is asynchronous!
 
 - Refactored the callback function in google strategy -
 
-Older: 
+Older:
 
 ```
 (accessToken, refreshToken, profile, done) => {
@@ -87,7 +87,6 @@ async (accessToken, refreshToken, profile, done) => {
   )
 ```
 
-
 ## Frontend tech
 
 Server setup -> authentication flow(server) -> client setup -> auth on client -> add survey APIs on server -> add survey stuff on client
@@ -98,18 +97,17 @@ projectname.com - Header, landing components
 projectname.com/surveys - Header, dashboard, surveylist, surveylist item components
 projectname.com/surveys/new - surveryform, formfield component
 
-
 ## Client react setup
+
 - Deleted all the files inside client/src folder except registerServiceWorker.js
 
 > Building from scratch:
 
-- Essentially 2 root files. 
- - Index.js contains the initial bootup logic of react and redux.So it contains the redux logic as well
- - App.js is a component for rendering on screen, so it contains the logic of react-router
+- Essentially 2 root files.
+- Index.js contains the initial bootup logic of react and redux.So it contains the redux logic as well
+- App.js is a component for rendering on screen, so it contains the logic of react-router
 
 index.js (Data layer control) -> App.js(Rendering layer control)
-
 
 > Components overview:
 
@@ -117,48 +115,43 @@ index -> app -> Landing/Header/Dashboard/SurveyNew
 Dashboard -> SurveyList -> SurveyListItem
 SurveyNew -> SurveyField
 
-
 - Install following dependencies - redux, react-redux, react-router-dom
 - Create index.js and render a root component to DOM
 
-
 > Notes:
-  - If a given file is exporting class or a react component of any type, whether functional or class based component, label the file with capital initial letter. But if the file returns a function or just a series of func. label it with lowercase.
 
-  - We use imports statement in frontend because webpack and babel support es16 modules whereas on backend nodejs supports only commonjs modules till now.
+- If a given file is exporting class or a react component of any type, whether functional or class based component, label the file with capital initial letter. But if the file returns a function or just a series of func. label it with lowercase.
 
-  - <App /> is component's instance
+- We use imports statement in frontend because webpack and babel support es16 modules whereas on backend nodejs supports only commonjs modules till now.
 
-  - QuerySelector vs GetElementById? What is the diference between:
-`ReactDOM.render(<App />, document.querySelector('#root')); ` and `ReactDOM.render(<App />, document.getElementById('root'));` 
+- <App /> is component's instance
 
-   - querySelector is used to query any element based on a class, ID, or type, similar to how jQuery works. Both do the same thing, but getElementById is more specific, so it is slightly better for performance than querySelector. 
-   - QuerySelector  => return any elements (class, div, id, etc..)
-   - getElementById => strictly return Id element only
+- QuerySelector vs GetElementById? What is the diference between:
+  `ReactDOM.render(<App />, document.querySelector('#root'));` and `ReactDOM.render(<App />, document.getElementById('root'));`
 
-
+- querySelector is used to query any element based on a class, ID, or type, similar to how jQuery works. Both do the same thing, but getElementById is more specific, so it is slightly better for performance than querySelector.
+- QuerySelector => return any elements (class, div, id, etc..)
+- getElementById => strictly return Id element only
 
 ## Redux Review
 
 React, redux, react-redux
 
- Store -> Provider -> App -> Dashboard -> SurveyList -> SurveyListItem
+Store -> Provider -> App -> Dashboard -> SurveyList -> SurveyListItem
 
-  - Provider is a component that makes the store accessible to every component in the app. 
+- Provider is a component that makes the store accessible to every component in the app.
 
- > State management
+> State management
 
- Redux store -> combineReducers -> 
-  - authReducer (records whether or not the user is logged in) 
- OR 
-  - surverysReducer (records a list of all surveys user has created)
+Redux store -> combineReducers ->
 
+- authReducer (records whether or not the user is logged in)
+  OR
+- surverysReducer (records a list of all surveys user has created)
 
-- To determine current state or change the state, call an action creator which dispatches an action. 
-- Action is sent to all the reducers inside the app.
-- Those reducers are combined together by combinerReducers call which updates the state in redux store.
-
-
+* To determine current state or change the state, call an action creator which dispatches an action.
+* Action is sent to all the reducers inside the app.
+* Those reducers are combined together by combinerReducers call which updates the state in redux store.
 
 ## Redux Setup
 
@@ -179,9 +172,7 @@ ReactDOM.render(
   </Provider>,
   document.querySelector("#root")
 );
-
 ```
-
 
 ## Auth reducer
 
@@ -193,7 +184,6 @@ export default function(state = {}, action) {
       return state;
   }
 }
-
 ```
 
 > combineReducers in reducers/index.js
@@ -209,8 +199,44 @@ export default combineReducers({
 //whatever keys we give to combineReducers are going to represent the keys of our state object.
 ```
 
-
 ## React router setup
 
+- Put all the config around diff navigation states of our app into app.js
+- App.js is responsible for view layer
+- Import the objects {BrowserRouter, Route} from react-router-dom
+- Wrap the root component with <BrowserRouter>. It can only have one child component.
 
-- Wrap the root component with <BrowserRouter>
+* Whenever react router decides what component to render, its going to take current url and then try to match every single route path to current url from top to bottom. So "/" path matches to every route. So pass the "exact" property in route.
+
+* Since header always needs to be present on all the routes, don't tie it with any route, just write it before all the route config.
+
+```
+<BrowserRouter>
+           <div>
+               <Header />
+               <Route path="/" exact component={Landing} />
+               <Route path="/surveys" exact component={Dashboard} />
+               <Route path="/surveys/new" component={SurveyNew} />
+           </div>
+</BrowserRouter>
+```
+
+Oganizing these routes in a "first match route approach" instead of using "exact" props every time just to avoid showing parent route with the child route? What's the best use case?
+
+```
+<Route path="/surveys/new" component={SurveyNew}/>
+<Route path="/surveys" component={Dashboard}/>
+<Route path="/" component={Landing}/>
+```
+
+- To do that, you would need to import Switch from react-router-dom and use it like this
+- Notice the order of routes
+
+```
+<Header />
+<Switch>
+ <Route exact path="/" component={Landing} />
+ <Route path="/surveys/new" component={SurveyNew} />
+ <Route path="/surveys" component={Dashboard} />
+</Switch>
+```

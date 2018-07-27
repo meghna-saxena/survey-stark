@@ -240,3 +240,25 @@ Oganizing these routes in a "first match route approach" instead of using "exact
  <Route path="/surveys" component={Dashboard} />
 </Switch>
 ```
+
+
+
+## Materialize CSS
+- Pre-styled css for any js frameworks
+- Can also use react materialize or material-UI => React components that implement Google's Material Design.
+
+- However material UI uses javascript based styling. So customizing is challenging.
+- Using `yarn add materialize-css` in our project
+
+
+## Webpack with CSS
+Webpack is a module loader
+
+CRA -> Webpack -> index.js -> App.js + materialize.css
+
+- Webpack is not limited to processing of js files, it also utilizes loaders that instruct it how to handle other types of files as well.
+
+
+- Hook up materialze css inside project
+    - import 'materialize-css/dist/css/materialize.min.css'; inside index.js
+    - when you dont give a relative path, webpack assumes automatically that you're referring to an npm module installed inside node_modules directory

@@ -377,3 +377,29 @@ export const fetchUser = () => async dispatch => {
 ```
 
 - Async / await is syntactic sugar to help you write normal linear declaration code in asynchronous actions. This takes away the necessary handling of returned promises which will break your code if you try to assign their "expected" value to a variable in your functional declaration. You can use try/catch for error handling.
+
+
+
+## AuthReducer returns values
+- Till now successfully actions are getting dispatched to the endpoint inside a.c.
+
+3 diff situations for authReducer =>
+- Now when you make the req to backend to get current user -> authReducer returns null -> null indicates that we dont know what's up right now
+- Req complete, user is logged in -> authReducer returns user model -> obj containing user ID
+- Req done, user is NOT logged in -> authReducer returns false -> False means, user is not logged in
+
+    - For 1st case, instead of setting state={}, initialize state as null in reducer
+    `export default (state = {}, action) => ...`
+
+    - In js, empty tring is considered false value
+
+```
+export default (state = null, action) => {
+  switch (action.type) {
+    case FETCH_USER:
+      return action.payload || false; //if user is not auth'd return false
+    default:
+      return state;
+  }
+};
+```

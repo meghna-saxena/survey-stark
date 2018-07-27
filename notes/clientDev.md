@@ -340,3 +340,40 @@ const fetchUser = () => {
 
 Note:
 Redux Thunk allows your action creators to return a function instead of returning an action object. This function gives you access to the dispatch function, and allows you to dispatch multiple actions as you please. You can dispatch actions when certain conditions are met. Redux Promise on the other hand, allows your action creators to return a promise as the payload. You can use both Redux Thunk and Redux Promise in your applications based on the situation. If there is a lot of complexity or a need for conditonals, Redux Thunk is the way to go. But let's say you have multiple promises and also have the need for conditionals at the same time, you will be using both
+
+
+
+## Refactoring the app
+- Add the action creator to one of the component.
+- Add the auth a.c inside app.js, since the whole app needs the logic.
+- We want to fetch the current user, so to get access to lifecycle method, refactor to class based comp
+- Use componentDidMountto call initial ajax req. since instance of the comp is mounted/rendered, so fetch the current user
+- Wire the app with redux store by {connect} helper.
+- Wrap the app with connect
+`export default connect(null, actions)(App);`
+- All the actions are assigned to App as props. So access to them by this.props
+
+```
+ componentDidMount() {
+      this.props.fetchUser();
+}
+```
+
+- If you console the action in authReducer, then on rebooting the react app, you can see the a.c getting triggered, and it fetches a payload of data with googleID, showing that the user is logged in.
+
+
+## Refactoring to async/await
+- At present a.c is making use of promise which is returned from axios.get()
+- Anytime we make req it returns promise, so we chain the code by .then
+
+- If in arrow statements, returns return a single expression, remove the curly brace and return keyword.
+
+```
+export const fetchUser = () => async dispatch => {
+  const res = await axios.get("/api/current_user");
+  
+  dispatch({ type: FETCH_USER, payload: res });
+};
+```
+
+- Async / await is syntactic sugar to help you write normal linear declaration code in asynchronous actions. This takes away the necessary handling of returned promises which will break your code if you try to assign their "expected" value to a variable in your functional declaration. You can use try/catch for error handling.

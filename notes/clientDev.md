@@ -427,3 +427,16 @@ export default connect(mapStateToProps)(Header);
 - Created a renderContent() method and made the switch cases for null, login and logout
 
 
+## Redirecting a user on Auth
+- After user logs in redirect him to '/surveys', since its showing an error after getting redirected to /auth/google/callback
+- inside server/routes/authRoutes, modify the route handler and add res.redirect property
+
+```
+app.get(
+    "/auth/google/callback",
+    passport.authenticate("google"),
+    (req, res) => {
+      res.redirect("/surveys");
+    }
+  );
+```

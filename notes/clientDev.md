@@ -471,4 +471,17 @@ Here we're choosing the full http req for logout
 
 
   ## Landing Component
-  
+  - Made a landing component for route "/"
+
+
+  ## Link tags
+  - The logo should be clickable and redirect to comp based on whether the user is auth'd or not
+  - If user is not auth'd, redirect to root route, landing comp, or else show the dashboard component on "/surveys" route.
+  - Anchor tags <a> are meant for classic navigation b/w HTML doc in traditional webpage.
+  - Since our webpage is rendered by react-router, so we want a link which upon clicking tells react router to render some comp on screen.
+
+
+- {Link} navigate to diff route rendered by react router
+- <a> => navigate to a completely diff html document
+
+- At some locations in our app, we use <a> tag cause we want to navigate to diff domain or html doc Eg: Login button

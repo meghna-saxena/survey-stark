@@ -108,3 +108,30 @@ and wrote publishable key, you can console log it in src/index.js by :
 console.log('STRIPE KEY IS:', process.env.REACT_APP_STRIPE_KEY);
 console.log('ENVIRONMENT IS:', process.env.NODE_ENV);
 ```
+
+
+
+## The payments component
+- Configure react-stripe-checkout component
+- When we render it as react comp, it shows a btn that says buy now, when user click it, a form appears on screen.
+- So after we configure this comp we will place it in header comp
+
+- Make a comp that wrap stripe checkout thing and adds some config to it
+
+```
+import StripeCheckout from "react-stripe-checkout";
+
+class Payments extends Component {
+  render() {
+    debugger;
+    return (
+      <StripeCheckout
+        amount={500} //5$ = 500cents)
+        token={token => console.log(token)} //callback func that gets called with a token received from stripe
+        stripeKey={process.env.REACT_APP_STRIPE_KEY} //api key
+      />
+    );
+  }
+}
+
+```

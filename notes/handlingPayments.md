@@ -213,3 +213,24 @@ npmjs.com -> `stripe` - a lib to work with node apps
 ## Creating a charge object
 - Inside route handler made the logic to create a charge by => `stripe.charges.create()`
 - req.body.id is the token we got from stripe api, it is used as source property inside stripe charge
+
+
+## Finalizing a charge
+Pass callback async function as promises, so wrap the stripe.charge by async/await
+
+```
+module.exports = app => {
+  app.post("/api/stripe", async (req, res) => {
+    const charge = await stripe.charges.create({
+      amount: 500,
+      currency: "usd",
+      description: "$5 for 5 credits",
+      source: req.body.id
+    });
+
+    console.log(charge);
+  });
+};
+``` 
+
+On express server, you can see the charge by id: 'ch_.....'

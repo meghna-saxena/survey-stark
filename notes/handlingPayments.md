@@ -193,3 +193,6 @@ The action creator gets called whenever we get a token from stripe checkout form
 
 
 ## Creating charges
+- Install npm module specifically used for serverside of app to help with stripe api, so stripe checkout lib on frontend
+
+npmjs.com -> `stripe` - a lib to work with node apps  

@@ -168,7 +168,7 @@ AuthReducer has user model. So we are not making another billing reducer. We're 
 - Anytime you want to communicate with backend api, always make that req inside action creator.
 - POST req to backend 
 
-created action creator and reusing the same type and payload so that authReducer can pick the same action, and update the usermodel in the header
+created action creator and reusing the same action type and payload so that authReducer can pick the same action, and update the usermodel in the header
 
 ```
 export const handleToken = token => async dispatch => {
@@ -177,3 +177,10 @@ export const handleToken = token => async dispatch => {
   dispatch({ type: FETCH_USER, payload: res.data });
 };
 ```
+
+
+
+## Posting the stripe token
+The action creator gets called whenever we get a token from stripe checkout form, so that it post the token to backend api
+- Inside payments.js -
+` token={token => this.props.handleToken(token)} `

@@ -261,6 +261,19 @@ User model
 - respond to req with updates user model
 - req.user.save() to save on db
 
+> User model
+
+```
+// create schema for new collection
+const userSchema = new Schema({
+  googleId: String,
+  credits: { type: Number, default: 0 }
+});
+```
+
+
+Setting route handler
+
 ```
 const keys = require("../config/keys");
 const stripe = require("stripe")(keys.stripeSecretKey);
@@ -322,3 +335,7 @@ module.exports = app => {
       ...
 
 ```
+
+
+## Displaying credit quantity
+- Display credits by `{this.props.auth.credits}`

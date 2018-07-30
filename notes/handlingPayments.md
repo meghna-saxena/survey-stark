@@ -184,3 +184,12 @@ export const handleToken = token => async dispatch => {
 The action creator gets called whenever we get a token from stripe checkout form, so that it post the token to backend api
 - Inside payments.js -
 ` token={token => this.props.handleToken(token)} `
+
+
+## POST request handlers
+- Setup req handlers at express api to watch for post req to route `/api/stripe`
+
+- In the req handler we have to put logic to reach stripe api and finalize the actual charge, and then update the user's no. of credits.
+
+
+## Creating charges

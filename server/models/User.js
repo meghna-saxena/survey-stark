@@ -5,9 +5,10 @@ const { Schema } = mongoose;
 
 // create schema for new collection
 const userSchema = new Schema({
-    googleId: String
+  googleId: String,
+  credits: { type: Number, default: 0 }
 });
 
 //create mongoose model class
 //'users' is collection name
-mongoose.model('users', userSchema);
+mongoose.model("users", userSchema);

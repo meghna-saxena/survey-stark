@@ -234,3 +234,50 @@ module.exports = app => {
 ``` 
 
 On express server, you can see the charge by id: 'ch_.....'
+
+
+__________________________________________________
+
+> Note:
+
+After the user submits the checkout form on the client side we get given a token from 'react-stripe-checkout' and then call the handleToken action creator with the token as an argument.
+
+The handleToken() action creator then makes an asynchronous post request to our API at /api/stripe .
+
+We then create a route handler on our API to receive this REQUEST coming in from the client side to then make another asynchronous post REQUEST to the stripe API?
+
+We obtain the token in the route handler on the server then pass it along in a followup request from the server to stripe.  The thought process here is that we might want to do some secure processing on the token before passing it off to stripe - it wouldn't be appropriate for the client to reach directly out to stripe.
+
+
+
+## Adding credits to a user
+- We are building our users for some amt of money, we need to followup and give them no. of credits
+
+User model 
+    - googleId
+    - credits <- default to 0
+
+- req.user is current user, setup by passport
+- respond to req with updates user model
+- req.user.save() to save on db
+
+```
+const keys = require("../config/keys");
+const stripe = require("stripe")(keys.stripeSecretKey);
+
+module.exports = app => {
+  app.post("/api/stripe", async (req, res) => {
+    const charge = await stripe.charges.create({
+      amount: 500,
+      currency: "usd",
+      description: "$5 for 5 credits",
+      source: req.body.id
+    });
+
+    req.user.credits += 5;
+    const user = await req.user.save(); //saves in db
+
+    res.send(user);
+  });
+};
+```

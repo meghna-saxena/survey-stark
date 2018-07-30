@@ -1,8 +1,13 @@
 .nav-wrapper {
     background-color: #00BCD4;
+    padding-left: 10px;
 }
 
 .myImg{
     height: 40px;
     margin-top: 10px;
+}
+
+.btn {
+    background-color: #fa983a;
 }

@@ -139,5 +139,15 @@ class Payments extends Component {
 
 
 ## Stripe tokens
-- Inside header comp when we return the payment comp, we get the `pay with card` button by default. On clicking, it generates a form. We're working in test mode so CC no. to be used is `4242 4242 4242 4242`.
+- Inside header comp when we return the payment comp, we get the `pay with card` button by default. On clicking, it generates a form. We're working in `test mode` so CC no. to be used is `4242 4242 4242 4242`.
 - Upon submission, we get back a token object which as an `id` used as auth token when express api interacts with stripe api
+
+
+
+## Payment fixes
+- Send the stripe token to express api, then our api will do followup req to stripe and then add some credits to the user a/c
+- We dont actually have a user a/c, we actually have an obj or model inside db that represents a user
+- So every user model will have a record of no. of current credits that they have.
+
+- <StripeComp><button className="btn">Add Credits</button></StripeComp>
+{/*child comp is displayed as btn rather than built-in btn by stripe checkout*/}

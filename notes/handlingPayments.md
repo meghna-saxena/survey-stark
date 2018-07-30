@@ -151,3 +151,29 @@ class Payments extends Component {
 
 - <StripeComp><button className="btn">Add Credits</button></StripeComp>
 {/*child comp is displayed as btn rather than built-in btn by stripe checkout*/}
+
+
+
+## Reusing action types
+- Update the header with no. of credits
+- User model will have a record of no. of credits
+- When our app first boots up, we fetch the user model and save it inside authReducer
+
+
+App boots up -> fetch current user -> Header updated
+User pays money -> response sends back current user model with no. of credits -> Header updated
+
+AuthReducer has user model. So we are not making another billing reducer. We're reusing our same reducer.
+
+- Anytime you want to communicate with backend api, always make that req inside action creator.
+- POST req to backend 
+
+created action creator and reusing the same type and payload so that authReducer can pick the same action, and update the usermodel in the header
+
+```
+export const handleToken = token => async dispatch => {
+  const res = await axios.post("/api/stripe", token);
+
+  dispatch({ type: FETCH_USER, payload: res.data });
+};
+```

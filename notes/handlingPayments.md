@@ -135,3 +135,9 @@ class Payments extends Component {
 }
 
 ```
+
+
+
+## Stripe tokens
+- Inside header comp when we return the payment comp, we get the `pay with card` button by default. On clicking, it generates a form. We're working in test mode so CC no. to be used is `4242 4242 4242 4242`.
+- Upon submission, we get back a token object which as an `id` used as auth token when express api interacts with stripe api

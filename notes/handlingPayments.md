@@ -196,3 +196,14 @@ The action creator gets called whenever we get a token from stripe checkout form
 - Install npm module specifically used for serverside of app to help with stripe api, so stripe checkout lib on frontend
 
 npmjs.com -> `stripe` - a lib to work with node apps  
+- We have to work with charges - to charge a credit/debit card, you create a charge object
+- This charge obj is returned from stripe api
+
+
+
+## Bodyparser middleware
+- When you make req to express server, express doesnt by default parse the request payload
+- So install `body-parser` another lib, which acts as express middleware to parse the req.
+- Express middleware are wired up to express by app.use() call
+- Parses the incoming req from stripe api to get the token, can see the value inside req.body   
+`app.use(bodyParser.json());`

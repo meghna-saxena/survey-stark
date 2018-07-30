@@ -281,3 +281,9 @@ module.exports = app => {
   });
 };
 ```
+
+- In browser you can check the response of user model in networks tab -> XHR -> Stripe -> Preview   
+
+
+## Requiring authentication
+- Create a check inside billing rutes to see if user is auth'd, otherwise don't go thru entire stripe process, instead just show err msg

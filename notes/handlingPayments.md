@@ -207,3 +207,9 @@ npmjs.com -> `stripe` - a lib to work with node apps
 - Express middleware are wired up to express by app.use() call
 - Parses the incoming req from stripe api to get the token, can see the value inside req.body   
 `app.use(bodyParser.json());`
+
+
+
+## Creating a charge object
+- Inside route handler made the logic to create a charge by => `stripe.charges.create()`
+- req.body.id is the token we got from stripe api, it is used as source property inside stripe charge

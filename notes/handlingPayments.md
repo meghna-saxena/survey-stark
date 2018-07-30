@@ -339,3 +339,8 @@ module.exports = app => {
 
 ## Displaying credit quantity
 - Display credits by `{this.props.auth.credits}`
+
+
+
+## Updating credits
+- Credits get updated automatically since this.props.auth updates whenever state of an app changes.

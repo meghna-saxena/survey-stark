@@ -286,4 +286,39 @@ module.exports = app => {
 
 
 ## Requiring authentication
-- Create a check inside billing rutes to see if user is auth'd, otherwise don't go thru entire stripe process, instead just show err msg
+- Create a check inside billingRoutes to see if user is auth'd, before allowing the req to continue inside the body of req handler, and dont thru entire stripe process, instead just show err msg
+
+
+
+## Route specific middlewares
+- We would need auth check logic at several location so generalize the logic at one place.
+
+- When req comes from browser to express app, there can optionally be some middlewares wired up to app.
+- Those middlewares inspect an incoming req and modify it, if needed.
+- The req is then taken and sent to route handlers inside the app
+
+    - Middleware are functions
+    - Passport is a middleware
+
+- Create a middleware to check user auth on some particular route handlers
+
+```
+module.exports = (req, res, next) => {
+  if (!req.user) {
+    return res.status(401).send({ error: "You must login!" });
+  }
+
+  next();
+};
+```
+
+- Now require the middleware file inside route handler file, and pass the req to middleware
+
+```
+const requireLogin = require("../middlewares/requireLogin");
+
+module.exports = app => {
+  app.post("/api/stripe", requireLogin, async (req, res) => {
+      ...
+
+```

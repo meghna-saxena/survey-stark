@@ -10,7 +10,10 @@ require("./services/passport");
 // const authRoutes = require("./routes/authRoutes");
 
 //connecting mongoose with mongoDB
-mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
+mongoose.connect(
+  keys.mongoURI,
+  { useNewUrlParser: true }
+);
 
 // app decalaration
 const app = express();
@@ -35,6 +38,18 @@ app.use(passport.session());
 // for refactoring we can also re-write
 require("./routes/authRoutes")(app);
 require("./routes/billingRoutes")(app);
+
+//handling routing in prod. for routes defined in clientside
+if (process.env.NODE_ENV === "production") {
+  //Express setsup prod. assets like main.js, main.css
+  app.use(express.static("client/build"));
+
+  //Express serves index.html, if it doesnt recognize the route
+  const path = require("path");
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);

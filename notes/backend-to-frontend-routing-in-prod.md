@@ -72,5 +72,20 @@ Deployment options -
 - Refer circleCI
 
 
-## Notes
+> Notes
 localhost is the hostname of your computer, 3000 and 5000 are ports that are used by processes to serve the applications. In this case the Express server uses port 5000 while the Webpack development server for the client side uses 3000. In production you would create an asset, the bundle.js file which is the entire client side code, transpiled, minified and uglified. That file is served by a web server directly such as express or nginx etc. 
+
+
+
+## Adding in a heroku build setup
+- Choosing option #2 for deployment
+
+Push to heroku -> heroku installs server deps -> heroku automatically runs `heroku-postbuild` -> we tell heroku installs client deps -> we tell heroku runs `npm run build` 
+
+
+- refer customizing build process in heroku docs
+- add script in server/package.json
+- client package.json doesnt reach heroku, we just have backend server on heroku not cra server
+
+- Added script -
+`"heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"`

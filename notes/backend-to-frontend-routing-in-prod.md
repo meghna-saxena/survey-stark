@@ -37,7 +37,7 @@ Browser -> /client/build/static/js/main.js -> express server -> main.js
 - How express will deal with some routes, it doesnt have route handler of?
 
 ```
-//handling routing in prod. for routes defined in clientside
+/handling routing in prod. for routes defined in clientside
 if (process.env.NODE_ENV === "production") {
   //Express setsup prod. assets like main.js, main.css
   app.use(express.static("client/build"));
@@ -49,3 +49,28 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 ```
+
+
+## Deployment options
+- `npm run build` is a one-time step for the current codebase. So if you make changes later, you have to build again.
+- Anytime we deploy to heroku, first build the project and then deploy
+- By convention we dont commit build dir to git
+
+Deployment options -
+
+#1 Build client project -> Commit built project -> push to heroku
+- Breaks convention of not commiting build to git. Here you commit build files to git
+
+#2 Push to heroku -> Heroku installs *all* dependencies for client projct -> Heroku builds client project
+- Downside heroku installs unnecessary dependencies on prod. server which are used for dev environment only.
+
+
+#3 Push to CI (Continous integration) -> Run test & stuffs -> CI builds and commits client -> CI pushes build to heroku
+- More common
+- Use 3rd party server to build the application
+- Sometimes its an overkill, since it need to run tests on codebase
+- Refer circleCI
+
+
+## Notes
+localhost is the hostname of your computer, 3000 and 5000 are ports that are used by processes to serve the applications. In this case the Express server uses port 5000 while the Webpack development server for the client side uses 3000. In production you would create an asset, the bundle.js file which is the entire client side code, transpiled, minified and uglified. That file is served by a web server directly such as express or nginx etc. 

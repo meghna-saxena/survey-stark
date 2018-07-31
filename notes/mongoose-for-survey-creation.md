@@ -43,3 +43,13 @@ recipients - comma separated list of email addresses to send survey to
 
 
 ## Survey model
+User -> Survey (a new model class) -> title/body/subj/recipients
+
+- Inorder to know which user created which survey there's link b/w user model class and survey model class  
+- Create new model class -> Survey.js
+
+- require mongoose
+- Get {schema} obj out of mongoose
+- create new schema containing all diff properties, model class will have
+- load the schema into mongoose lib by calling mongoose.model('name of model class', name of schema)
+- require the file inside index.js

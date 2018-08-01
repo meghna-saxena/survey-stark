@@ -293,3 +293,27 @@ dateSent: Date.now()
 Just one issue - remember that the list of emails is supposed to be separated by commas and spaces.  We split by commas here, but there still might be some trailing or leading spaces on each email.  As such, we should make sure that we cut out any extra white space. So make sure you change this line of code to read:
 
 `recipients: recipients.split(',').map(email => ({ email: email.trim() })),` 
+
+
+
+## Creating mailers
+- Till now created an instance of a survey on memory. Its not yet saved in the db.
+
+- How we take survey obj to use it to create and send email to all the diff recipients.
+- This POST api endpoint -> /api/surveys is for creating a new survey and send out a big email containing a list of email addresses.
+
+
+Create new survey instance -> attempt to create and send email -> email sent successfully? -> save survey! -> survey handler complete
+
+
+> Work flow
+
+  - Survey instance and Email template => Mailer (email generation helper) -> http request -> send 'mailer' to email provider
+  - Survey instance tells the data inside the mail (data layer), and email template is the design/structure of the email (view layer).
+  - Survey instance and email template are merged together inside 'mailer' object
+  - Mailer obj represents one single email that is sent to list of people.
+  - We're not interfacing with some email server directly, instead we use an API that automatically sends these emails.
+
+
+
+  ## Identifying unique users

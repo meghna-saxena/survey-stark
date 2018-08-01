@@ -174,3 +174,13 @@ From mongoose docs for Mongoose.model:
 The first argument is the singular name of the collection your model is for. Mongoose automatically looks for the plural version of your model name. 
 
 Also, if you pass a third string to your Mongoose.model, you can force mongoose to create a collection of that name instead of pluralizing it.
+
+
+
+## Survey creation route handler
+- Always import the models somewhere in the project, most likely in index.js
+
+- Survey routes file to deine POST req handler for /api/surveys
+- 2 thinsg to keep in mind while creating the survey route handler
+    - User should be logged in
+    - User have enough credits => 1 creait = 1 survey

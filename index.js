@@ -39,6 +39,8 @@ app.use(passport.session());
 // for refactoring we can also re-write
 require("./routes/authRoutes")(app);
 require("./routes/billingRoutes")(app);
+require("./routes/surveyRoutes")(app); //calling the route func immediately with the app obj
+
 
 //handling routing in prod. for routes defined in clientside
 if (process.env.NODE_ENV === "production") {

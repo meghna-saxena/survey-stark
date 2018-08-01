@@ -367,4 +367,28 @@ So, POST `/api/surveys/webhooks` (records feedback from a user) -> this route on
   - Sendgrid is email provider
   - Signup -> settings -> API keys
 - install a npm module `sendgrid` that helps interacting directly with sendgrid  
+- sendgrid module helps to create mailer object and send it to sendgrid API
+
+
+## Mailer setup
+
+` survey -> pass property into -> template ---> Mailer `
+
+Mailer: 
+  - survey gives -> subj, recipients
+  - template gives -> body, from_email
+  |--> this.toJSON() ---> send to sendgrid
+
+- Setup mailer as es6 class
+- import the class, require in route file, create new instance of mailer, customize it, send it to outside world
+
+- Create new file services/Mailer.js
+
+```
+const sendgrid = require("sendgrid");
+const helper = sendgrid.mail;
+const keys = require("../config/keys");
+
+class Mailer extends helper.Mail {}
+```
 

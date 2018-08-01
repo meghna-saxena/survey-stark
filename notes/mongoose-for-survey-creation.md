@@ -53,3 +53,23 @@ User -> Survey (a new model class) -> title/body/subj/recipients
 - create new schema containing all diff properties, model class will have
 - load the schema into mongoose lib by calling mongoose.model('name of model class', name of schema)
 - require the file inside index.js
+
+
+## Model deficiencies
+- Deficiencies present in the way we have created schema
+
+
+Where do we store feedback?
+- Add additional property inside survey schema to store feedback response
+- Prevent user from clicking the yes/no btn multiple times
+
+
+> How to prevent duplicates?
+`Subdocument collection`, term used by mongo and mongoose
+
+Survey - title/body/sub/recipients/yes/no
+
+recipients: [String] //array of string, and every str is individual email address
+
+- Recipients property will have subdocument collection, submodel recipient, there would be single recipient for every str of array
+Recipients -> recipient -> email/clicked

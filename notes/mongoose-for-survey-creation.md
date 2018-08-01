@@ -199,3 +199,39 @@ In index.js -
 
 
 ## Verifying min credits
+- Make another middleware to check if the `req.user.credits < 1`, then throw an error
+- Wireup the route handler with the middleware
+
+
+## Creating Surveys
+- when the req comes to /api/surveys, it should contain some properties inside req obj. Eg: title, sub, body, recipients
+- create new instance of survey
+   - require Survey model class inside the route handler file
+   - extract the data out of req.body
+   - create a new instance/record by assigning the values from req.body to the properties of survey model
+
+```
+const mongoose = require("mongoose");
+const requireLogin = require("../middlewares/requireLogin");
+const requireCredits = require("../middlewares/requireCredits");
+
+//requiring mongoose model class
+const Survey = mongoose.model("surveys");
+
+module.exports = app => {
+  app.post("/api/surveys", requireLogin, requireCredits, (req, res) => {
+    const { title, subject, body, recipients } = req.body;
+
+    //creating instance of survey
+    const survey = new Survey({
+      title: title,
+      subject, //es6 syntax
+      body
+    })
+  });
+};
+```
+
+
+
+## Creating Subdocs Collection

@@ -235,3 +235,61 @@ module.exports = app => {
 
 
 ## Creating Subdocs Collection
+
+Survey instance
+title: 'my title'
+subject: 'my subject'
+body: 'feedback pls'
+recipients: ---------------> recipients subdocs collection
+(comma separated str. of emails)
+
+Recipients subdocs collection
+{email: 'me@xyz.com'}
+{email: 'abc@xyz.com'}
+{email: 'test@xyz.com'}
+Array of objects
+
+
+So transform arr. of strings to arr of objects
+
+- How we do it?
+  - email@example.com,me@two.com,user@google.com -> split(',')
+
+  - array of strings
+    [email@example.com
+    me@two.com
+    user@google.com] -> map
+
+  - array of objects
+    {
+      email@example.com
+    }
+    {
+      me@two.com
+    }
+    {
+      user@google.com
+    }
+
+```
+recipients: recipients.split(",").map(email => {
+        return { email: email };
+      })
+ ```     
+
+- Link survey to current user for _user property
+
+```
+_user: req.user.id,
+dateSent: Date.now()
+```
+
+
+
+> Note:
+
+`recipients: recipients.split(',').map(email => ({ email: email })), `
+
+Just one issue - remember that the list of emails is supposed to be separated by commas and spaces.  We split by commas here, but there still might be some trailing or leading spaces on each email.  As such, we should make sure that we cut out any extra white space. So make sure you change this line of code to read:
+
+`recipients: recipients.split(',').map(email => ({ email: email.trim() })),` 

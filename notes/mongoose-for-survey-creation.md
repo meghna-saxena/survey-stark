@@ -138,3 +138,39 @@ mongoose.model("surveys", surveySchema);
 ```
 
 - When mongoose first loads up the surveys model, whenever it saves a record to the surveys collection, it will store an arr of recipientSchema records
+
+
+
+## Relationship fields
+- A user will have many surveys, so how to identify which survey belongs to which user?
+
+- To set a relationship b/w survey and user, add another property to survey schema object
+
+_user to make mognoose understand that this is reference to a particular user or another instance of a user
+
+_user means every surveySchema belong to a particular user. 
+- type: Schema.Types.ObjectId, (id of the user on this record)
+- ref: "User" (reference we are making belong to User colletion)
+
+by convention we write like _user to tell it has relationship/ref field b/w this model and other model
+
+dateSent: Date,
+lastResponded: Date
+
+- These properties gives an idea to user, that whether this survey is active or not
+Eg: You got 500 responses, and the last time someone responsed was like week ago
+
+
+> Note:
+
+Why are we using User rather than users as the ref?
+Shouldn't the reference be users?  When we created the user schema we named the collection users.  The file name was User but the actual schema was users.  
+
+
+From reading the mongoose docs, it seems the ref should actually be 'User' and the models should also be 'User', 'Survey', etc....(I changed all mine in the models, and the imports) He might actually fix it later in the course. I'm assuming Mongoose knows that 'User' and 'users' is the same collection.
+
+From mongoose docs for Mongoose.model:
+
+The first argument is the singular name of the collection your model is for. Mongoose automatically looks for the plural version of your model name. 
+
+Also, if you pass a third string to your Mongoose.model, you can force mongoose to create a collection of that name instead of pluralizing it.

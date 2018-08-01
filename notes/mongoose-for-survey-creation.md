@@ -180,7 +180,22 @@ Also, if you pass a third string to your Mongoose.model, you can force mongoose 
 ## Survey creation route handler
 - Always import the models somewhere in the project, most likely in index.js
 
-- Survey routes file to deine POST req handler for /api/surveys
-- 2 thinsg to keep in mind while creating the survey route handler
+- Survey routes file to define POST req handler for /api/surveys
+- 2 things to keep in mind while creating the survey route handler
     - User should be logged in
-    - User have enough credits => 1 creait = 1 survey
+    - User have enough credits => 1 credit = 1 survey
+
+```
+const requireLogin = require('../middlewares/requireLogin');
+
+module.exports = app => {
+  app.post("/api/surveys", requireLogin, (req, res) => {}); //use the middleware to check auth
+};
+```
+
+In index.js -
+`require("./routes/surveyRoutes")(app); //calling the route func immediately with the app obj`
+
+
+
+## Verifying min credits

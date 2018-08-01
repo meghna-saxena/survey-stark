@@ -333,7 +333,7 @@ Recipient -> mailer -> send email
 
 
 > GOOD EMAIL APPROACH:
-All Recipient -> One mailer -> email provider -> send to individual recipient
+`All Recipient -> One mailer -> email provider -> send to individual recipient`
 
 - 1 request to send email
 
@@ -359,3 +359,12 @@ Sendgrid sends email ----> sendgrid scans the email, replaces every link with th
 - Webhook is  anything where some outside API is facilitating a process and then gives our application some type of callback/notice that some event occured.
 
 So, POST `/api/surveys/webhooks` (records feedback from a user) -> this route only sendgrid accesses and send it in some intervals to tell notification that someone clicked, here's the info.    
+
+
+
+## Sendgrid setup
+- Signup with sendgrid API and set them up!
+  - Sendgrid is email provider
+  - Signup -> settings -> API keys
+- install a npm module `sendgrid` that helps interacting directly with sendgrid  
+

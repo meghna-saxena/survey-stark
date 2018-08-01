@@ -309,7 +309,7 @@ Create new survey instance -> attempt to create and send email -> email sent suc
 > Work flow
 
   - Survey instance and Email template => Mailer (email generation helper) -> http request -> send 'mailer' to email provider
-  - Survey instance tells the data inside the mail (data layer), and email template is the design/structure of the email (view layer).
+  - Survey instance tells the data inside the mail (data layer), and email template is the design/structure of the email, contains html or body of the mail (view layer).
   - Survey instance and email template are merged together inside 'mailer' object
   - Mailer obj represents one single email that is sent to list of people.
   - We're not interfacing with some email server directly, instead we use an API that automatically sends these emails.
@@ -317,3 +317,45 @@ Create new survey instance -> attempt to create and send email -> email sent suc
 
 
   ## Identifying unique users
+  - Communicating mailer to email provider is complicated process!
+
+> BAD EMAIL APPROACH:
+Recipient -> mailer -> send email
+Recipient -> mailer -> send email
+Recipient -> mailer -> send email
+Recipient -> mailer -> send email
+...
+
+
+- For every single recipient inside the recipient list, create a separate mailer object, then send that mailer to email provider   on a separate http req, which will then send the email to the individual recipient
+
+- 10,000 req to send email for one survey!
+
+
+> GOOD EMAIL APPROACH:
+All Recipient -> One mailer -> email provider -> send to individual recipient
+
+- 1 request to send email
+
+
+Drawbacks of this approach
+- Since evryone gets the exact same mail containing exact same links Yes/No, how will we understand who clicked on a link?
+- How to uniquely identify people?
+- Prevent duplicate votes
+- Everyone gets the exact same mail, so we cant put a token on mail
+
+Solution: we want something like this to get user info/user email  -> surveystark/surveys/feedback/123/no/user@example.com
+
+Email provider we use => `sendgrid.com`
+
+- Whenever we sendgrid to send out an email to one of user, sendgrid looks the body of the email, and if any link is present, it automatically replace the link with customized link that send the users to their own servers (own sendgrid server).
+
+- And they do this to build a collect metrics on what links are being clicked. So sendgrid records analytic info about the user.
+
+
+Sendgrid sends email ----> sendgrid scans the email, replaces every link with their own special one (sendgrid knows who the recipient of every email is! The links they inject into the email contains a token that identifies the user!) ----> user clicks a link ---> sendgrid knows who clicked it! ---> User sent to their destination (user happy) and Sendgrid sends a msg to our server telling us about the click (webhook)
+
+
+- Webhook is  anything where some outside API is facilitating a process and then gives our application some type of callback/notice that some event occured.
+
+So, POST `/api/surveys/webhooks` (records feedback from a user) -> this route only sendgrid accesses and send it in some intervals to tell notification that someone clicked, here's the info.    

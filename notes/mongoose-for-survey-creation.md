@@ -429,8 +429,11 @@ module.exports = Mailer;
 - recipient property is passed from survey, it is an array of objects, where each obj has an email
 - So format this subdocs collection, to just extract the email address, that's what formatAddresses() funct do.
 
+
+
 ## Boilerplate for sending emails
 
+- Configure some sendgrid defined properties for email setup
 
 ```
 const sendgrid = require("sendgrid");
@@ -448,14 +451,16 @@ class Mailer extends helper.Mail {
 
     // register the body with the email/mailer itself
     this.addContent(this.body);
+
+    //tracking clicks
     this.addClickTracking();
-    this.addRecipients();   
+    this.addRecipients(); //takes the formatted list and register with the actual email
   }
 
   formatAddresses(recipients) {
     //arr of obj containing emails
     return recipients.map(({ email }) => {
-      return new helper.Email(email); //arr of emails
+      return new helper.Email(email); //turn each recipient into one of these helper.Email thing, arr of helper obj
     });
   }
 
@@ -467,8 +472,16 @@ class Mailer extends helper.Mail {
     trackingSettings.setClickTracking(clickTracking);
     this.addTrackingSettings(trackingSettings);
   }
+
+  addRecipients() {
+    const personalize = new helper.Personalization();
+
+    this.recipients.forEach(recipient => {
+      personalize.addTo(recipient);
+    });
+    this.addPersonalization(personalize);
+  }
 }
 
 module.exports = Mailer;
-
 ```

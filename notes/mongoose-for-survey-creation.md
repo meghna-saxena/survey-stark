@@ -542,3 +542,12 @@ window.axios = axios;
  `axios.post('/api/surveys', survey);`
 
  > We'll receive the email!
+
+
+
+ ## Improving the email template
+ - Body of email is produced by surveyTemplate file.
+ - So inside surveyTemplate create a multi-line html code by using template literals.
+ - Put two links for yes/no
+ - Apart of html code, also include survey.body
+ - When you check the mail received, upon inspection of links in the email, you'll see that the anchor tag href is replaced by sendgrid own custom clickTracking url instead.

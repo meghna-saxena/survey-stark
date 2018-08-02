@@ -1,4 +1,19 @@
 module.exports = survey => {
-  //returns a string that represent actual html to be shown in the email body
-  return "<div>" + survey.body + "</div>";
+  return `
+  <html>
+    <body>
+      <div style="text-align: center;">
+        <h3>We need your feedback!</h3>
+          <p>Please answer the following question:</p>
+          <p>${survey.body}</p>
+          <div>
+            <a href="http://localhost:3000">Yes</a>
+          </div>
+          <div>
+            <a href="http://localhost:3000">No</a>
+          </div>
+      </div>
+    </body>
+  </html>
+  `;
 };

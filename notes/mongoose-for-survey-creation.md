@@ -396,3 +396,31 @@ converted into -> this.toJSON() -> send to sendgrid
 
 So refactored the code -
 `const mailer = new Mailer(survey, surveyTemplate(survey));`
+
+
+
+## Mailer constructor
+
+Note: Whenever we call `new` on a class 
+eg new Mailer(...)
+
+  - The first func automatically executed inside the class is the constructor func.
+
+```
+const sendgrid = require("sendgrid");
+const helper = sendgrid.mail;
+const keys = require("../config/keys");
+
+class Mailer extends helper.Mail {
+  constructor({ subject, recipients }, content) {
+    super();
+
+    this.from_email = new helper.Email("no-reply@surveystark.com");
+    this.subject = subject;
+    this.body = new helper.Content("text/html", content);
+    this.recipients = this.formatAddresses(recipients);
+  }
+}
+
+module.exports = Mailer;
+```

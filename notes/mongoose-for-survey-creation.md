@@ -509,3 +509,36 @@ async send() {
 
 
 ## Testing email sending
+- To make sure mailer communicates with sendgrid api, remember to call the send() function.
+- Make sure to call `send()` on the surveyRoutes, mailer object we created
+  `mailer.send();`
+
+
+- How to make a POST req, without having anything on react side, no survey form to submit?
+  - Use a REST client => They are applications that can run on your local laptop called REST clients. They allow to make API req to any arbitary endpoint on any given server.
+  Eg: Postman
+
+  - Challenge:
+    - Our app requires user to be logged in and some amt of credits should be present.
+    - Doing Oauth flow is challenging for rest client
+
+  - So, make axios post req from react app manually
+  - Whenever a req is made from frontend to backend server, cookies are included, so login check is passed!
+
+
+- Inside client/index.js => 
+
+```
+import axios from "axios";
+
+//testing backend route
+window.axios = axios;
+```
+ 
+- Move to console and make axios req manually =>
+ 
+ `const survey = {title: 'SurveyStark', subject: 'Test mail', body: 'Testing out my app.', recipients: 'emailrajmeghna@gmail.com'};`
+
+ `axios.post('/api/surveys', survey);`
+
+ > We'll receive the email!

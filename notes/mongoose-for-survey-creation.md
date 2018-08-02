@@ -485,3 +485,27 @@ class Mailer extends helper.Mail {
 
 module.exports = Mailer;
 ```
+
+
+## Sending sendgrid emails
+- Add another property by sendgrid inside the mailer obj construc func., which communicates the mailer to sendgrid API
+
+`this.sgApi = sendgrid(keys.sendGridKey);`
+
+- Make another func to handle the req of sending the mailer to sendgrid api, since its asynchronous use async/await
+
+```
+async send() {
+    const request = this.sgApi.emptyRequest({
+      method: "POST",
+      path: "/v3/mail/send",
+      body: this.toJSON()
+    });
+
+    const response = await this.sgApi.API(request);
+    return response;
+  }
+  ```
+
+
+## Testing email sending

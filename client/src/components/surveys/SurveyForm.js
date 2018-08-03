@@ -36,7 +36,7 @@ class SurveyForm extends Component {
   render() {
     return (
       <div>
-        <form onSubmit={this.props.handleSubmit(values => console.log(values))}>
+        <form className="form" onSubmit={this.props.handleSubmit(values => console.log(values))}>
           {/* <Field type="text" name="surveyTitle" component="input" /> */}
           {this.renderFields()}
           <button type="submit">Submit</button>

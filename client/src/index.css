@@ -1,6 +1,7 @@
 .nav-wrapper {
     background-color: #00BCD4;
-    padding-left: 10px;
+    padding-left: 20px;
+    margin-top: 20px;
 }
 
 .myImg{
@@ -11,3 +12,9 @@
 .btn {
     background-color: #fa983a;
 }
+
+.form {
+    /* background-color: azure; */
+    margin-top: 40px;
+}
+

@@ -570,3 +570,22 @@ window.axios = axios;
     }
 ```
 - This whole process is asynchronous so wrap the req with async syntax.
+
+- Verify sendgrid click tracking by going on sendgrid dashboard.
+
+
+
+## Feedback for user feedback
+- Inside email box, we cant rely on relative links, so /surveys will redirect the user to gmail.com/surveys which will show error
+- What domain should be the user be redirected to after clicking yes/no
+
+- Inside surveyRoute handler, add additional route -
+
+```
+  app.get("/api/surveys/thanks", (req, res) => {
+      res.send("Thanks for voting!");
+    });
+```
+
+- Inside surveyTemplate, redirect the user on clicking yes/no
+` <a href="${keys.redirectDomain}/api/surveys/thanks">Yes</a>`

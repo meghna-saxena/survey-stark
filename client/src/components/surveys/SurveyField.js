@@ -1,9 +1,11 @@
 import React from "react";
 
-const SurveyField = () => {
+const SurveyField = ({ input, label }) => {
+  //accessing props.input, props are given by field helper from redux form
   return (
     <div>
-      <input />
+      <label>{label}</label>
+      <input {...input} />
     </div>
   );
 };

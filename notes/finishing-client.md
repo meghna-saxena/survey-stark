@@ -122,3 +122,39 @@ export default reduxForm({
   form: "surveyForm"
 })(SurveyForm);
 ```
+
+
+## Wiring up custom fields
+- Since survey field comp is wired up with field helper method by redux form, it has access to many props, eg: event handlers. So if any change is made on input, event handler notice it automatically. We dont need to define an event handler.
+
+```
+import React from "react";
+
+const SurveyField = ({ input, label }) => {
+  //accessing props.input, props are given by field helper from redux form
+  return (
+    <div>
+      <label>{label}</label>
+      <input {...input} />
+    </div>
+  );
+};
+
+export default SurveyField;
+```
+
+Inside survey form pass the label this way =>
+
+```
+class SurveyForm extends Component {
+  renderFields() {
+    return (
+      <div>
+        <Field
+          label="Survey Title"
+          type="text"
+          name="title"
+          component={SurveyField}
+        />
+        ...
+```

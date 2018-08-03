@@ -158,3 +158,30 @@ class SurveyForm extends Component {
         />
         ...
 ```
+
+
+## Fields from config
+
+```
+const FIELDS = [
+  { label: "Survey Title", name: "title" },
+  { label: "Subject Line", name: "subject" },
+  { label: "Email Body", name: "body" },
+  { label: "Recipient List", name: "emails" }
+];
+
+class SurveyForm extends Component {
+  renderFields() {
+    return _.map(FIELDS, field => {
+      return (
+        <Field
+          key={field.name}
+          component={SurveyField}
+          type="text"
+          label={field.label}
+          name={field.name}
+        />
+      );
+    });
+  }
+```

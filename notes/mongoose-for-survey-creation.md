@@ -589,3 +589,5 @@ window.axios = axios;
 
 - Inside surveyTemplate, redirect the user on clicking yes/no
 ` <a href="${keys.redirectDomain}/api/surveys/thanks">Yes</a>`
+
+

@@ -22,3 +22,8 @@ Refer => https://materializecss.com/
 
 - Add the link to client/index.html for accessing icons
 
+
+## Navigation with the Link tag
+- Link tag by react-router-dom
+- Give to property, redirecting it to "/surveys/new"
+

@@ -15,3 +15,10 @@
 - For the user to navigate to this form, put a + btn on dashboard
 - This dashboard will show list of surveys and a + btn
 
+
+
+## Material Icons
+Refer => https://materializecss.com/
+
+- Add the link to client/index.html for accessing icons
+

@@ -66,3 +66,22 @@ Redux -> Store -> authReducer, formReducer (formReducer is managed entirely by r
 
 
 ## Redux form setup
+
+- We're creating wizard form, which is multi-pages and has next btn
+- import {reduxForm} from 'redux-form' inside surveyForm.js
+- think of reduxForm as connect helper which allows to connect the comp with the redux store    
+- Field is a helper provided by redux-form for rendering any type of html form element.
+
+```
+<form onSubmit={this.props.handleSubmit(values => console.log(values))}>
+    <Field type="text" name="surveyTitle" component="input" />
+    <button type="submit">Submit</button>
+</form>
+```
+
+- name property tells that we have one piece of data produced by redux form called surveyTitle, so the value we type in the filed will be stored under the key of surveyTitle
+
+- component="input" means we want a html input tag. We can also replace component={} some custom react comp.
+
+-  <form onSubmit={this.props.handleSubmit}> 
+this func. is provided automatically by redux form helper that we wired at the bottom

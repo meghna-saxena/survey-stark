@@ -27,3 +27,42 @@ Refer => https://materializecss.com/
 - Link tag by react-router-dom
 - Give to property, redirecting it to "/surveys/new"
 
+
+
+## SurveyNew form
+- SurveyNew - overall component
+    - SurveyForm
+    - SurveyField
+
+- SurveyFormReview - another component
+
+
+## Purpose of redux form
+
+Component structure =>
+
+    - App
+        - SurveyNew
+            - SurveyForm -> SurveyField/SurveyField/SurveyField
+            - SurveyFormReview
+
+        Both components need data/value from the SurveyField
+
+We use redux form because =>
+When user enters some surveyfield, that calls an action creator and updates the state in redux store, so structure becomes => 
+
+- Redux
+    - App
+        - SurveyNew
+            - SurveyForm -> SurveyField/SurveyField/SurveyField
+            - SurveyFormReview
+
+
+- Now we can connect SurveyFormReview to redux store
+
+
+Redux -> Store -> authReducer, formReducer (formReducer is managed entirely by redux form, it records all the values from the form automatically.)
+
+
+
+## Redux form setup

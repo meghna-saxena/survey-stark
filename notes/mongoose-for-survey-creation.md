@@ -551,3 +551,22 @@ window.axios = axios;
  - Put two links for yes/no
  - Apart of html code, also include survey.body
  - When you check the mail received, upon inspection of links in the email, you'll see that the anchor tag href is replaced by sendgrid own custom clickTracking url instead.
+
+
+ ## Polish in the route handler
+ - Make sure to subtract 1 credit from user a/c after 1 survey is successfully sent!
+ - After sending mailer, save the survey!
+
+ ```
+ try {
+      await mailer.send();
+      await survey.save();
+      req.user.credits -= 1;
+
+      const user = await req.user.save();
+      res.send(user);
+    } catch (err) {
+      res.status(422).send(err);
+    }
+```
+- This whole process is asynchronous so wrap the req with async syntax.

@@ -49,7 +49,14 @@ class SurveyForm extends Component {
 
 function validate(values) {
   const errors = {};
+
+  // FIELDS.forEach(field => {
+  //   if(!values[field.name]) {
+  //     errors[field.name] = "This field cannot be empty";
+  //   }
+  // })
   _.each(FIELDS, ({ name }) => {
+    debugger;
     if (!values[name]) {
       errors[name] = "This field cannot be empty";
     }

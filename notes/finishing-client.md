@@ -185,3 +185,22 @@ class SurveyForm extends Component {
     });
   }
 ```
+
+- Make cancel and submit btn on surveys/new
+
+
+## Form validation
+- Name the error property name identical to field name, the error will then get automatically rendered because of redux form
+
+```
+function validate(values) {
+  const errors = {};
+  _.each(FIELDS, ({ name }) => {
+    if (!values[name]) {
+      errors[name] = "This field cannot be empty";
+    }
+  });
+
+  return errors;
+}
+```

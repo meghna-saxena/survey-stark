@@ -222,3 +222,16 @@ How to determine which comp. to show?
 
 
 SurveyNew -> state.showReview === true? -> surveyForm or surveyFormReview
+
+
+## Persisiting form values
+Use `destroyOnUnmount: false` property by redux form
+
+```
+export default reduxForm({
+  validate: validate,
+  form: "surveyForm",
+  destroyOnUnmount: false
+})(SurveyForm);
+
+```

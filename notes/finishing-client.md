@@ -204,3 +204,21 @@ function validate(values) {
   return errors;
 }
 ```
+
+- Validate emails
+  - Use split(), trim(), filter()
+  - refer this => http://emailregex.com/
+
+
+
+
+## Toggling visibility
+SurveyNew -> ?? -> SurveyForm or SurveyFormReview
+
+How to determine which comp. to show?
+- Separate route
+- Redux
+- Component state - we will use this!
+
+
+SurveyNew -> state.showReview === true? -> surveyForm or surveyFormReview

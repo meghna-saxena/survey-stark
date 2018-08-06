@@ -235,3 +235,5 @@ export default reduxForm({
 })(SurveyForm);
 
 ```
+
+- Created separate file for form fields, and used it in both comp - survey form and survey form review

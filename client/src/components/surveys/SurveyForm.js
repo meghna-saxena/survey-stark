@@ -4,17 +4,11 @@ import { reduxForm, Field } from "redux-form";
 import { Link } from "react-router-dom";
 import SurveyField from "./SurveyField";
 import validateEmails from "../../utils/validateEmails";
-
-const FIELDS = [
-  { label: "Survey Title", name: "title" },
-  { label: "Subject Line", name: "subject" },
-  { label: "Email Body", name: "body" },
-  { label: "Recipient List", name: "emails" }
-];
+import formFields from './formFields';
 
 class SurveyForm extends Component {
   renderFields() {
-    return _.map(FIELDS, field => {
+    return _.map(formFields, field => {
       return (
         <Field
           key={field.name}
@@ -54,12 +48,12 @@ function validate(values) {
 
   errors.emails = validateEmails(values.emails || "");
 
-  // FIELDS.forEach(field => {
+  // formFields.forEach(field => {
   //   if(!values[field.name]) {
   //     errors[field.name] = "This field cannot be empty";
   //   }
   // })
-  _.each(FIELDS, ({ name }) => {
+  _.each(formFields, ({ name }) => {
     if (!values[name]) {
       errors[name] = "This field cannot be empty";
     }

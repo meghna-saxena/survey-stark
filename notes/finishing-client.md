@@ -273,3 +273,12 @@ export const submitSurvey = values => async dispatch => {
   dispatch({ type: FETCH_USER, payload: res.data });
 };
 ```
+
+
+## Redirect on submit
+- `Programmatic/automatic navigation`
+- submit form review doesnt know about react-router
+  - use `withRouter()` helper provided by react-router lib
+  - using withRouter to access the object called `history`
+  - withRouter works like an hoc
+  - wrapped the survey form review comp. with withRouter => passed the history props to action creator => inside action creator call the `history.push('/surveys')`

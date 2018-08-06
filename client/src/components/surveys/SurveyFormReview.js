@@ -3,7 +3,7 @@ import React from "react";
 import { connect } from "react-redux";
 import * as actions from '../../actions';
 import formFields from "./formFields";
-import { SUBMIT_SURVEY } from "../../actions/types";
+import { submitSurvey } from "../../actions/types";
 
 const SurveyFormReview = ({ onCancel, formValues, submitSurvey }) => {
   const reviewFields = _.map(formFields, field => {

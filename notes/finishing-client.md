@@ -241,7 +241,7 @@ export default reduxForm({
 ## Sending survey
 - Whenevr state is changed, redux form uses action creator
 - 3 tasks
-  1. submit the form in the server
+  1. submit the form and post them to the backend server
   2. navigate the user back to dashboard
   3. if user clicks cancel on survey/new, and then enter '+' again, show empty form fields
 
@@ -256,3 +256,20 @@ export default reduxForm({
 ```
 
 So, when user comes to this component, since its not having destroyOnUnmount:false, it will automatically dump the values.
+
+
+## POSTing to surveys
+- Call action creator with values
+- Post form values to API
+- Post successful? Redirect users back to `/survey`
+- We get the updates user model as response which shows the current credits
+
+action creator =>
+
+```
+export const submitSurvey = values => async dispatch => {
+  const res = await axios.post("/api/surveys", values);
+
+  dispatch({ type: FETCH_USER, payload: res.data });
+};
+```

@@ -237,3 +237,10 @@ export default reduxForm({
 ```
 
 - Created separate file for form fields, and used it in both comp - survey form and survey form review
+
+## Sending survey
+- Whenevr state is changed, redux form uses action creator
+- 3 tasks
+  - submit the form in the server
+  - navigate the user back to dashboard
+  - if user clicks cancel on survey/new, and then enter '+' again, show empty form fields

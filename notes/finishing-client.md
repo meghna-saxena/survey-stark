@@ -241,6 +241,18 @@ export default reduxForm({
 ## Sending survey
 - Whenevr state is changed, redux form uses action creator
 - 3 tasks
-  - submit the form in the server
-  - navigate the user back to dashboard
-  - if user clicks cancel on survey/new, and then enter '+' again, show empty form fields
+  1. submit the form in the server
+  2. navigate the user back to dashboard
+  3. if user clicks cancel on survey/new, and then enter '+' again, show empty form fields
+
+For 3) step => 
+
+Inside SurveyNew component
+
+```
+export default reduxForm({
+  form: "surveyForm"
+})(SurveyNew);
+```
+
+So, when user comes to this component, since its not having destroyOnUnmount:false, it will automatically dump the values.

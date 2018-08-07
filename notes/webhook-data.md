@@ -158,12 +158,46 @@ Inside terminal =>
 [0]     choice: 'yes' } ]
 ```
 
-
-
 - Use compact func by lodash to remove undefined elements from the arr of click events
 
-` const compactEvents = _.compact(events);`
+`const compactEvents = _.compact(events);`
 
 - For removing duplicate records, another helper func by lodash
 
-`  const uniqueEvents = _.uniqBy(compactEvents, "email", "surveyId"); //removes duplicate records`
+`const uniqueEvents = _.uniqBy(compactEvents, "email", "surveyId"); //removes duplicate records`
+
+- we can use lodash chain helper to condense the code. Refer to docs!
+
+## Bad mongoose queries
+
+- We already have yes and no properties on survey models.
+- Insitead of pulling all the subdoc collection of recipinent list, just pull one recipient out of mongo whose email is matching with the event we got from sendgrid
+
+## Finding the exact survey
+
+- Make a query to find the survey with given id and also has the specific recipient(email) which has not responded (respondend: false). That way the whole query will get resolved on mongo itself, and we wont be dealing with loads of data on express server
+
+//find one amongst the survey collection
+
+```
+Survey.updateOne({
+id: surveyId,
+recipients: {
+$elemMatch: {email: email, responded: false}
+}
+}, {
+$inc: {[choice]: 1}, //choice = 'yes' || 'no'
+$set: {'recipients.$.responded': true}
+})
+```
+
+- $inc is mongo operator, increment
+- $ represent the specific index of recipient among bunch of subdocs collection
+
+> Note
+
+Having choice = 'yes' you can't say
+
+{ choice: 1 }  to get { yes: 1 } , you'll instead get just plain { choice: 1} .
+
+For this reason, you should do { [choice]: 1 }  and you will get { yes: 1 } instead of plain { choice: 1 

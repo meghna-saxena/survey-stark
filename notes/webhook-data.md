@@ -42,3 +42,15 @@ Sendgrid makes a post to our server with data about all the clicks in the last 3
 
 - Localtunnel allows you to easily share a web service on your local development machine without messing with DNS and firewall settings.
 - Localtunnel will assign you a unique publicly accessible url that will proxy all requests to your locally running webserver
+- installed inside the server project
+- Modify the server/package.json 
+
+```
+"dev": "concurrently \"npm run server\" \"npm run client\" \"npm run webhook\"",
+"webhook": "lt -p 5000 efevffrt" 
+
+lt - local tunnel, p - port, unique subdomain where req will come
+
+```
+
+- When we start the server on the terminal, we can see - our url is: https://strong-crab-76.localtunnel.me, sendgrid will send the req at this url

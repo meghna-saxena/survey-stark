@@ -54,3 +54,16 @@ lt - local tunnel, p - port, unique subdomain where req will come
 ```
 
 - When we start the server on the terminal, we can see - our url is: https://strong-crab-76.localtunnel.me, sendgrid will send the req at this url
+
+
+
+## Testing webhooks
+- Sengrid.com dashboard -> settings -> mail settings -> event notification -> ON -> enter the http post url
+- POST `/api/surveys/webhooks` => records feedback from a user
+- Enter the complete url inside sendgrid i.e => http://strong-crab-76.localtunnel.me/api/surveys/webhooks
+
+
+> Note
+
+Install localtunnel globally. It wouldn't work otherwise.
+In sendgrid, do not use https in your URL. You must use http in order for it to work. 

@@ -11,17 +11,17 @@ const surveyTemplate = require("../services/emailTemplates/surveyTemplate");
 const Survey = mongoose.model("surveys");
 
 module.exports = app => {
-  app.get("/api/surveys/thanks", (req, res) => {
+  app.get("/api/surveys/:surveyId/:choice", (req, res) => {
     res.send("Thanks for voting!");
   });
 
   app.post("/api/surveys/webhooks", (req, res) => {
+    const p = new Path("/api/surveys/:surveyId/:choice");
     const events = _.map(req.body, event => {
       const pathname = new URL(event.url).pathname;
-      const p = new Path("/api/surveys/:surveyId/:choice");
 
       // console.log(p.test(pathname));
-      const match = p.test(pathname); 
+      const match = p.test(pathname);
       if (match) {
         return {
           email: event.email,
@@ -34,7 +34,21 @@ module.exports = app => {
     const compactEvents = _.compact(events); //will remove el which are undefined inside the arr of click objects
     const uniqueEvents = _.uniqBy(compactEvents, "email", "surveyId"); //removes duplicate records
 
-    console.log(uniqueEvents);
+    // console.log(uniqueEvents);
+    const updatedSurvey = _.each(
+      uniqueEvents,
+      ({ surveyId, email, choice }) => {
+        Survey.updateOne({
+            _id: surveyId,
+            recipients: {
+              $elemMatch: { email: email, responded: false }
+            }},
+          {
+            $inc: { [choice]: 1 }, //choice = 'yes' || 'no'
+            $set: { "recipients.$.responded": true },
+            lastResponded: new Date()
+          }).exec();
+      });
 
     res.send({});
   });

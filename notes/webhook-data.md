@@ -200,4 +200,60 @@ Having choice = 'yes' you can't say
 
 { choice: 1 }  to get { yes: 1 } , you'll instead get just plain { choice: 1} .
 
-For this reason, you should do { [choice]: 1 }  and you will get { yes: 1 } instead of plain { choice: 1 
+For this reason, you should do { [choice]: 1 }  and you will get { yes: 1 } instead of plain { choice: 1}
+
+
+
+## Executing queries
+
+```
+app.post("/api/surveys/webhooks", (req, res) => {
+    const p = new Path("/api/surveys/:surveyId/:choice");
+    const events = _.map(req.body, event => {
+      const pathname = new URL(event.url).pathname;
+
+      // console.log(p.test(pathname));
+      const match = p.test(pathname);
+      if (match) {
+        return {
+          email: event.email,
+          surveyId: match.surveyId,
+          choice: match.choice
+        };
+      }
+    });
+
+    const compactEvents = _.compact(events); //will remove el which are undefined inside the arr of click objects
+    const uniqueEvents = _.uniqBy(compactEvents, "email", "surveyId"); //removes duplicate records
+
+    // console.log(uniqueEvents);
+
+    const executedQuery = _.each(
+      uniqueEvents,
+      ({ surveyId, email, choice }) => {
+        Survey.updateOne({
+            _id: surveyId,
+            recipients: {
+              $elemMatch: { email: email, responded: false }
+            }},
+          {
+            $inc: { [choice]: 1 }, //choice = 'yes' || 'no'
+            $set: { "recipients.$.responded": true }
+          }).exec();
+      });
+
+    res.send({});
+  });
+```
+
+- No need to wrap it with async/await, since we dont have to send a relevant res back to sendgrid
+- On mongo database, we can see the updated survey records
+
+
+- update lastResponded whenever we update a schema
+
+>Note
+
+MongoDB - Data Modelling. Data in MongoDB has a flexible schema.documents in the same collection. They do not need to have the same set of fields or structure, and common fields in a collection's documents may hold different types of data.
+
+The database schema of a database system is its structure described in a formal language supported by the database management system (DBMS). The term "schema" refers to the organization of data as a blueprint of how the database is constructed (divided into database tables in the case of relational databases).

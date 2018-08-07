@@ -21,8 +21,7 @@ module.exports = app => {
       const p = new Path("/api/surveys/:surveyId/:choice");
 
       // console.log(p.test(pathname));
-      const match = p.test(pathname);
-
+      const match = p.test(pathname); 
       if (match) {
         return {
           email: event.email,
@@ -31,7 +30,13 @@ module.exports = app => {
         };
       }
     });
-    console.log(events);
+
+    const compactEvents = _.compact(events); //will remove el which are undefined inside the arr of click objects
+    const uniqueEvents = _.uniqBy(compactEvents, "email", "surveyId"); //removes duplicate records
+
+    console.log(uniqueEvents);
+
+    res.send({});
   });
 
   app.post("/api/surveys", requireLogin, requireCredits, async (req, res) => {

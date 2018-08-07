@@ -157,3 +157,13 @@ Inside terminal =>
 [0]     surveyId: '5b69b1cb5f4e145705223091',
 [0]     choice: 'yes' } ]
 ```
+
+
+
+- Use compact func by lodash to remove undefined elements from the arr of click events
+
+` const compactEvents = _.compact(events);`
+
+- For removing duplicate records, another helper func by lodash
+
+`  const uniqueEvents = _.uniqBy(compactEvents, "email", "surveyId"); //removes duplicate records`

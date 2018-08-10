@@ -11,6 +11,12 @@ const surveyTemplate = require("../services/emailTemplates/surveyTemplate");
 const Survey = mongoose.model("surveys");
 
 module.exports = app => {
+  api.get("/api/surveys", requireLogin, async (req, res) => {
+    const surveys = await Survey.find({_user: req.user.id})
+
+    res.send(surveys);
+  });
+
   app.get("/api/surveys/:surveyId/:choice", (req, res) => {
     res.send("Thanks for voting!");
   });
@@ -38,17 +44,21 @@ module.exports = app => {
     const updatedSurvey = _.each(
       uniqueEvents,
       ({ surveyId, email, choice }) => {
-        Survey.updateOne({
+        Survey.updateOne(
+          {
             _id: surveyId,
             recipients: {
               $elemMatch: { email: email, responded: false }
-            }},
+            }
+          },
           {
             $inc: { [choice]: 1 }, //choice = 'yes' || 'no'
             $set: { "recipients.$.responded": true },
             lastResponded: new Date()
-          }).exec();
-      });
+          }
+        ).exec();
+      }
+    );
 
     res.send({});
   });

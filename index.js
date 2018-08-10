@@ -11,10 +11,7 @@ require("./services/passport");
 // const authRoutes = require("./routes/authRoutes");
 
 //connecting mongoose with mongoDB
-mongoose.connect(
-  keys.mongoURI,
-  { useNewUrlParser: true }
-);
+mongoose.connect(keys.mongoURI,{ useNewUrlParser: true });
 
 // app decalaration
 const app = express();

@@ -15,7 +15,7 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div>
-          <div>
+          <div className="container-fluid">
             <Header />
           </div>
           <div className="container">

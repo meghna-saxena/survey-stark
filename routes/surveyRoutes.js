@@ -11,6 +11,10 @@ const surveyTemplate = require("../services/emailTemplates/surveyTemplate");
 const Survey = mongoose.model("surveys");
 
 module.exports = app => {
+  
+
+
+
   app.get("/api/surveys", requireLogin, async (req, res) => {
     const surveys = await Survey.find({ _user: req.user.id }).select({
       recipients: false //not returning recipient list in the response
@@ -47,7 +51,7 @@ module.exports = app => {
 
       const compactEvents = _.compact(events); //will remove el which are undefined inside the arr of click objects
       const uniqueEvents = _.uniqBy(compactEvents, "email", "surveyId"); //removes duplicate records
-      
+
       const updatedSurvey = _.each(
         uniqueEvents,
         ({ surveyId, email, choice }) => {

@@ -126,3 +126,12 @@ Passing the fetchSurveys action creator into the mapDispatchToProps parameter of
 ## Reversing the SurveyList 
 
 - Right now we're showing the oldest syrveys at the top, so instead show the newest on the top.
+
+
+Note
+
+For prod. purpose, put together sendgrid webhook. Right now sendgrid is sending everything on localtunnel webhook, so in prod the webhook has different url
+
+Sendgrid doesnt allow to add multiple webhooks
+
+http://tough-fox-19.localtunnel.me

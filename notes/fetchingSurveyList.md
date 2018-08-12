@@ -21,7 +21,6 @@ GET /api/surveys => returns a list of surveys created by the current_user
 For accessing this handler the user should be auth'd, since we want current_user.id, so pass the requireLogin middleware
 
 ```
-{
   api.get("/api/surveys", requireLogin, async (req, res) => {
     const surveys = await Survey.find({_user: req.user.id})
 
@@ -45,4 +44,30 @@ module.exports = (req, res, next) => {
 ```
 
 
+## Whitelisting model fields
+
 - No need to fetch the big list of recipients inside each survey from the db
+- So tell mongoose DON'T return recipient list in the response
+- Research for query#select in mongoose docs, its also known as query "projection"
+
+> Query#select
+
+Means Query class, an an instance method called select.
+
+```
+query.select({ a: 1, b: 1 });
+query.select({ c: 0, d: 0 });
+```
+
+Here, 1 means include the field and 0 means exclude the field. So 1 and 0 are shorthand representation of true/false
+
+
+```
+api.get("/api/surveys", requireLogin, async (req, res) => {
+    const surveys = await Survey.find({ _user: req.user.id }).select({
+      recipients: false
+    });
+
+    res.send(surveys);
+  });
+```

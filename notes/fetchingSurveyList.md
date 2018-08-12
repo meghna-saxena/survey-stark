@@ -76,3 +76,8 @@ app.get("/api/surveys", requireLogin, async (req, res) => {
 ## Testing surveys endpoint
 
 - Test on the browser console `axios.get('/api/surveys');`
+
+
+
+## Wiring surveys up to redux
+- Made action, action creator and hooked it to reducer for fetching surveys

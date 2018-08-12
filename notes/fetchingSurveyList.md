@@ -9,7 +9,7 @@ GET /api/surveys => returns a list of surveys created by the current_user
 - Reaching out to db is asynchronous so use async/await helpers
 
 ```
- api.get("/api/surveys", async (req, res) => {
+ app.get("/api/surveys", async (req, res) => {
     const surveys = await Survey.find({
       _user: req.user.id
     });
@@ -21,7 +21,7 @@ GET /api/surveys => returns a list of surveys created by the current_user
 For accessing this handler the user should be auth'd, since we want current_user.id, so pass the requireLogin middleware
 
 ```
-  api.get("/api/surveys", requireLogin, async (req, res) => {
+  app.get("/api/surveys", requireLogin, async (req, res) => {
     const surveys = await Survey.find({_user: req.user.id})
 
     res.send(surveys);
@@ -63,7 +63,7 @@ Here, 1 means include the field and 0 means exclude the field. So 1 and 0 are sh
 
 
 ```
-api.get("/api/surveys", requireLogin, async (req, res) => {
+app.get("/api/surveys", requireLogin, async (req, res) => {
     const surveys = await Survey.find({ _user: req.user.id }).select({
       recipients: false
     });
@@ -71,3 +71,8 @@ api.get("/api/surveys", requireLogin, async (req, res) => {
     res.send(surveys);
   });
 ```
+
+
+## Testing surveys endpoint
+
+- Test on the browser console `axios.get('/api/surveys');`

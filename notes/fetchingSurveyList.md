@@ -109,3 +109,18 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps,{ fetchSurveys })(SurveyList);
 
 ```
+
+
+> Note:
+
+Passing the fetchSurveys action creator into the mapDispatchToProps parameter of the connect helper is how that action creator is given the dispatch method that it needs to dispatch an action to the Redux store to initialize a state change.
+
+
+
+## Rendering a list of surveys
+
+- Refer => https://materializecss.com/cards.html
+
+
+
+## Reversing the SurveyList

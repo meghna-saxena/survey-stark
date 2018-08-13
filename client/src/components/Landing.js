@@ -8,7 +8,7 @@ const Landing = () => {
         <h4>Collect feedback from your users</h4>
       </div>
       <div className="landingImg">
-        <img src={LandingImg} />
+        <img src={LandingImg} alt="" />
       </div>
       <footer className="footer">&copy; Meghna Srivastava</footer>
     </div>

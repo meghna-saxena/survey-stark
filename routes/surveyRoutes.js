@@ -11,9 +11,19 @@ const surveyTemplate = require("../services/emailTemplates/surveyTemplate");
 const Survey = mongoose.model("surveys");
 
 module.exports = app => {
+  app.delete("/api/surveys/:surveyId", requireLogin, async (req, res) => {
+    const surveyId = req.params.surveyId;
+    console.log("deleteSurvey request received for => ", surveyId);
+    await Survey.find({ _id: surveyId })
+      .remove()
+      .exec();
+    
+    const surveys = await Survey.find({ _user: req.user.id }).select({
+        recipients: false //not returning recipient list in the response
+    });
   
-
-
+    res.send(surveys);
+  });
 
   app.get("/api/surveys", requireLogin, async (req, res) => {
     const surveys = await Survey.find({ _user: req.user.id }).select({
@@ -30,48 +40,48 @@ module.exports = app => {
   app.post("/api/surveys/webhooks", (req, res) => {
     const p = new Path("/api/surveys/:surveyId/:choice");
 
-      const events = _.map(req.body, event => {
-        console.log("Got event in webhook", event);
-        if(!event.url) {
-          console.log("No url in event, returning.")
-          return;
-        }
+    const events = _.map(req.body, event => {
+      console.log("Got event in webhook", event);
+      if (!event.url) {
+        console.log("No url in event, returning.");
+        return;
+      }
 
-        const pathname = new URL(event.url).pathname;
+      const pathname = new URL(event.url).pathname;
 
-        const match = p.test(pathname);
-        if (match) {
-          return {
-            email: event.email,
-            surveyId: match.surveyId,
-            choice: match.choice
-          };
-        }
-      });
+      const match = p.test(pathname);
+      if (match) {
+        return {
+          email: event.email,
+          surveyId: match.surveyId,
+          choice: match.choice
+        };
+      }
+    });
 
-      const compactEvents = _.compact(events); //will remove el which are undefined inside the arr of click objects
-      const uniqueEvents = _.uniqBy(compactEvents, "email", "surveyId"); //removes duplicate records
+    const compactEvents = _.compact(events); //will remove el which are undefined inside the arr of click objects
+    const uniqueEvents = _.uniqBy(compactEvents, "email", "surveyId"); //removes duplicate records
 
-      const updatedSurvey = _.each(
-        uniqueEvents,
-        ({ surveyId, email, choice }) => {
-          Survey.updateOne(
-            {
-              _id: surveyId,
-              recipients: {
-                $elemMatch: { email: email, responded: false }
-              }
-            },
-            {
-              $inc: { [choice]: 1 }, //choice = 'yes' || 'no'
-              $set: { "recipients.$.responded": true },
-              lastResponded: new Date()
+    const updatedSurvey = _.each(
+      uniqueEvents,
+      ({ surveyId, email, choice }) => {
+        Survey.updateOne(
+          {
+            _id: surveyId,
+            recipients: {
+              $elemMatch: { email: email, responded: false }
             }
-          ).exec();
-        }
-      );
+          },
+          {
+            $inc: { [choice]: 1 }, //choice = 'yes' || 'no'
+            $set: { "recipients.$.responded": true },
+            lastResponded: new Date()
+          }
+        ).exec();
+      }
+    );
 
-      res.send({});
+    res.send({});
   });
 
   app.post("/api/surveys", requireLogin, requireCredits, async (req, res) => {

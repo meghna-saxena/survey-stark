@@ -1,18 +1,26 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { fetchSurveys } from "../../actions";
+import { fetchSurveys, deleteSurvey } from "../../actions";
 
 class SurveyList extends Component {
   componentDidMount() {
     this.props.fetchSurveys();
   }
 
+  deleteSurvey = id => {
+    console.log("survey id", id);
+    this.props.deleteSurvey(id);
+  };
+
   renderSurveys() {
     return this.props.surveys.reverse().map(survey => {
       return (
-        <div class="card grey lighten-5" key={survey._id}>
-          <div class="card-content">
-            <span class="card-title">{survey.title}</span>
+        <div className="card grey lighten-5" key={survey._id}>
+          <div className="card-content">
+            <span onClick={() => this.deleteSurvey(survey._id)}>
+              <i className="material-icons right">clear</i>
+            </span>
+            <span className="card-title">{survey.title}</span>
             <p>{survey.body}</p>
             <p className="right">
               Sent on: {new Date(survey.dateSent).toLocaleDateString()}
@@ -38,5 +46,5 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { fetchSurveys }
+  { fetchSurveys, deleteSurvey }
 )(SurveyList);

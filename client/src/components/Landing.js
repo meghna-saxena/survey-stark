@@ -1,17 +1,16 @@
 import React from "react";
-import LandingImg from "../../src/images/landing.jpg";
+import Logo from '../images/logo.png'
 
 const Landing = () => {
   return (
-    <div>
-      <div className="heading">
-        <h4>Collect feedback from your users</h4>
-      </div>
-      <div className="landingImg">
-        <img src={LandingImg} alt="" />
-      </div>
-      <footer className="footer">&copy; Meghna Srivastava</footer>
-    </div>
+      <header className="header">
+        <div className="text-box">
+            <h1 className="heading-primary">
+                <span className="heading-primary-main">Create surveys</span>
+                <span className="heading-primary-sub">Get feeback from your users</span>
+            </h1>
+        </div>
+      </header>
   );
 };
 

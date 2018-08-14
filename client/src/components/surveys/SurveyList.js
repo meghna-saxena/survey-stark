@@ -7,17 +7,12 @@ class SurveyList extends Component {
     this.props.fetchSurveys();
   }
 
-  deleteSurvey = id => {
-    console.log("survey id", id);
-    this.props.deleteSurvey(id);
-  };
-
   renderSurveys() {
     return this.props.surveys.reverse().map(survey => {
       return (
         <div className="card grey lighten-5" key={survey._id}>
           <div className="card-content">
-            <span onClick={() => this.deleteSurvey(survey._id)}>
+            <span onClick={() => this.props.deleteSurvey(survey._id)}>
               <i className="material-icons right">clear</i>
             </span>
             <span className="card-title">{survey.title}</span>
